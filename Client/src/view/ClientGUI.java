@@ -47,7 +47,6 @@ public class ClientGUI extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnOptions.add(lbClient, gridBagConstraints);
 
-        btCancel.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\OneDrive\\3CHIF\\POS\\Java\\2. Test\\Projekt\\Vorlage\\Icons 24Px\\close33 (1).png")); // NOI18N
         btCancel.setToolTipText("");
         btCancel.setBorder(null);
         btCancel.setBorderPainted(false);
@@ -59,7 +58,6 @@ public class ClientGUI extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnOptions.add(btCancel, gridBagConstraints);
 
-        btClientToServer.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\OneDrive\\3CHIF\\POS\\Java\\2. Test\\Projekt\\Vorlage\\Icons 24Px\\back28 (1).png")); // NOI18N
         btClientToServer.setBorder(null);
         btClientToServer.setBorderPainted(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -70,7 +68,6 @@ public class ClientGUI extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnOptions.add(btClientToServer, gridBagConstraints);
 
-        btServerToClient.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\OneDrive\\3CHIF\\POS\\Java\\2. Test\\Projekt\\Vorlage\\Icons 24Px\\right127 (1).png")); // NOI18N
         btServerToClient.setBorder(null);
         btServerToClient.setBorderPainted(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -81,7 +78,6 @@ public class ClientGUI extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnOptions.add(btServerToClient, gridBagConstraints);
 
-        btServerManager.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\OneDrive\\3CHIF\\POS\\Java\\2. Test\\Projekt\\Vorlage\\Icons 24Px\\menu33 (1).png")); // NOI18N
         btServerManager.setBorder(null);
         btServerManager.setBorderPainted(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
