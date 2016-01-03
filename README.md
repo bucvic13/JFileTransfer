@@ -4,4 +4,4 @@ Java
 ## Dependencies ##
 None
 ## Features #
-*) Easy to use
+* Easy to use
