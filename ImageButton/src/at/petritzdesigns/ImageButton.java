@@ -48,6 +48,7 @@ public class ImageButton extends JButton {
         this.setBorder(BorderFactory.createEmptyBorder());
         this.setBorderPainted(false);
         this.setText("");
+        this.setBackground(new Color(0, 0, 0, 1));
     }
 
     /**
@@ -62,13 +63,13 @@ public class ImageButton extends JButton {
 
         //clear
         g.clearRect(0, 0, w, h);
-
+        
         try {
             BufferedImage img = ImageHelper.toBufferedImage(getIcon());
             if (img != null) {
                 //set to default color
                 img = ImageHelper.coloredImage(img, defaultColor);
-
+                
                 int x = (w - img.getWidth()) / 2;
                 int y = (h - img.getHeight()) / 2;
 
@@ -86,7 +87,7 @@ public class ImageButton extends JButton {
                 if (!isEnabled()) {
                     img = ImageHelper.coloredImage(img, disabledColor);
                 }
-
+                
                 g.drawImage(img, x, y, this);
             }
         } catch (Exception ex) {
@@ -94,43 +95,43 @@ public class ImageButton extends JButton {
             System.err.println(ex);
         }
     }
-
+    
     public Color getPrimaryColor() {
         return primaryColor;
     }
-
+    
     public void setPrimaryColor(Color primaryColor) {
         this.primaryColor = primaryColor;
     }
-
+    
     public Color getDisabledColor() {
         return disabledColor;
     }
-
+    
     public void setDisabledColor(Color disabledColor) {
         this.disabledColor = disabledColor;
     }
-
+    
     public Dimension getImageSize() {
         return imageSize;
     }
-
+    
     public void setImageSize(Dimension imageSize) {
         this.imageSize = imageSize;
     }
-
+    
     public Color getDefaultColor() {
         return defaultColor;
     }
-
+    
     public void setDefaultColor(Color defaultColor) {
         this.defaultColor = defaultColor;
     }
-
+    
     public Color getHoverColor() {
         return hoverColor;
     }
-
+    
     public void setHoverColor(Color hoverColor) {
         this.hoverColor = hoverColor;
     }
