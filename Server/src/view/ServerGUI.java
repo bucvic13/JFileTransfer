@@ -37,7 +37,7 @@ public class ServerGUI extends javax.swing.JFrame {
         tfPort = new javax.swing.JTextField();
         lbRootDirectory = new javax.swing.JLabel();
         tfRootDirectory = new javax.swing.JTextField();
-        btGetRootDirectory = new javax.swing.JButton();
+        btRootDirectory = new at.petritzdesigns.ImageButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -109,44 +109,43 @@ public class ServerGUI extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnInsertData.add(tfRootDirectory, gridBagConstraints);
 
-        btGetRootDirectory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/src/mode.png"))); // NOI18N
-        btGetRootDirectory.setBorder(null);
-        btGetRootDirectory.addActionListener(new java.awt.event.ActionListener() {
+        btRootDirectory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/src/mode.png"))); // NOI18N
+        btRootDirectory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                onOpenFileChooser(evt);
+                onChooseFile(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnInsertData.add(btGetRootDirectory, gridBagConstraints);
+        pnInsertData.add(btRootDirectory, gridBagConstraints);
 
         getContentPane().add(pnInsertData, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void onOpenFileChooser(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onOpenFileChooser
+    private void onChooseFile(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onChooseFile
         try {
             JFileChooser chooser = new JFileChooser(pfad);
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             int ans = chooser.showOpenDialog(null);
             if (ans == JFileChooser.APPROVE_OPTION) {
                 try {
+                    //TODO only allow directory selection
+                    
                     File f = chooser.getSelectedFile();
                     tfRootDirectory.setText(f.toString());
 
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(this, "Error while saving..." + ex.toString());
+                    JOptionPane.showMessageDialog(this, "Error while opening..." + ex.toString());
                 }
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
 
-    }//GEN-LAST:event_onOpenFileChooser
+    }//GEN-LAST:event_onChooseFile
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -157,7 +156,7 @@ public class ServerGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btGetRootDirectory;
+    private at.petritzdesigns.ImageButton btRootDirectory;
     private javax.swing.JButton btStartServer;
     private javax.swing.JLabel lbIP;
     private javax.swing.JLabel lbPort;
