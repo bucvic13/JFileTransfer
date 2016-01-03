@@ -47,7 +47,7 @@ public class ImageButton extends JButton {
         super();
         this.setBorder(BorderFactory.createEmptyBorder());
         this.setBorderPainted(false);
-        this.setBackground(new Color(0, 0, 0, 1));
+        this.setText("");
     }
 
     /**
@@ -57,14 +57,18 @@ public class ImageButton extends JButton {
      */
     @Override
     protected void paintComponent(Graphics g) {
+        int w = getWidth();
+        int h = getHeight();
+
+        //clear
+        g.clearRect(0, 0, w, h);
+
         try {
             BufferedImage img = ImageHelper.toBufferedImage(getIcon());
             if (img != null) {
                 //set to default color
                 img = ImageHelper.coloredImage(img, defaultColor);
 
-                int w = getWidth();
-                int h = getHeight();
                 int x = (w - img.getWidth()) / 2;
                 int y = (h - img.getHeight()) / 2;
 
