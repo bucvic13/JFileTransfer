@@ -5,19 +5,20 @@ import java.io.File;
 import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 /**
  *
  * @author Viktoria Buchegger
  */
 public class ServerGUI extends javax.swing.JFrame {
-
+    
     private String pfad = System.getProperty("user.dir") + System.getProperty("file.separator")
             + "src" + System.getProperty("file.separator");
-
+    
     public ServerGUI() {
         initComponents();
-
+        
         initGuiElements();
     }
 
@@ -132,11 +133,9 @@ public class ServerGUI extends javax.swing.JFrame {
             int ans = chooser.showOpenDialog(null);
             if (ans == JFileChooser.APPROVE_OPTION) {
                 try {
-                    //TODO only allow directory selection
-                    
                     File f = chooser.getSelectedFile();
                     tfRootDirectory.setText(f.toString());
-
+                    
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, "Error while opening..." + ex.toString());
                 }
@@ -144,10 +143,14 @@ public class ServerGUI extends javax.swing.JFrame {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
-
     }//GEN-LAST:event_onChooseFile
     public static void main(String args[]) {
-
+        //Use Windows Look&Feel
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            System.err.println(e);
+        }
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new ServerGUI().setVisible(true);
@@ -171,7 +174,10 @@ public class ServerGUI extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void initGuiElements() {
-
-        tfIP.disable();
+        
+        tfIP.setEnabled(false);
+        Color col = new Color(240, 240, 240);
+        btRootDirectory.setBackground(col);
+        
     }
 }

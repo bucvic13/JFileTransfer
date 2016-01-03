@@ -1,5 +1,8 @@
 package view;
 
+import java.awt.Color;
+import javax.swing.UIManager;
+
 /**
  *
  * @author Viktoria Buchegger
@@ -8,6 +11,8 @@ public class ClientGUI extends javax.swing.JFrame {
 
     public ClientGUI() {
         initComponents();
+        initGuiElements();
+
     }
 
     @SuppressWarnings("unchecked")
@@ -17,14 +22,14 @@ public class ClientGUI extends javax.swing.JFrame {
 
         pnOptions = new javax.swing.JPanel();
         lbClient = new javax.swing.JLabel();
-        btCancel = new javax.swing.JButton();
-        btClientToServer = new javax.swing.JButton();
-        btServerToClient = new javax.swing.JButton();
-        btServerManager = new javax.swing.JButton();
         lbIP = new javax.swing.JLabel();
         lbPort = new javax.swing.JLabel();
         tfIP = new javax.swing.JTextField();
         tfPort = new javax.swing.JTextField();
+        imageButton1 = new at.petritzdesigns.ImageButton();
+        imageButton2 = new at.petritzdesigns.ImageButton();
+        imageButton3 = new at.petritzdesigns.ImageButton();
+        imageButton4 = new at.petritzdesigns.ImageButton();
         pnData = new javax.swing.JPanel();
         tbLocal = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -44,54 +49,15 @@ public class ClientGUI extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         pnOptions.add(lbClient, gridBagConstraints);
-
-        btCancel.setToolTipText("");
-        btCancel.setBorder(null);
-        btCancel.setBorderPainted(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnOptions.add(btCancel, gridBagConstraints);
-
-        btClientToServer.setBorder(null);
-        btClientToServer.setBorderPainted(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnOptions.add(btClientToServer, gridBagConstraints);
-
-        btServerToClient.setBorder(null);
-        btServerToClient.setBorderPainted(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnOptions.add(btServerToClient, gridBagConstraints);
-
-        btServerManager.setBorder(null);
-        btServerManager.setBorderPainted(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnOptions.add(btServerManager, gridBagConstraints);
 
         lbIP.setText("IP:");
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         pnOptions.add(lbIP, gridBagConstraints);
 
         lbPort.setText("Port:");
@@ -99,14 +65,16 @@ public class ClientGUI extends javax.swing.JFrame {
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         pnOptions.add(lbPort, gridBagConstraints);
 
         tfIP.setColumns(10);
         tfIP.setToolTipText("");
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         pnOptions.add(tfIP, gridBagConstraints);
 
         tfPort.setColumns(10);
@@ -115,8 +83,48 @@ public class ClientGUI extends javax.swing.JFrame {
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         pnOptions.add(tfPort, gridBagConstraints);
+
+        imageButton1.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\OneDrive\\3CHIF\\POS\\Java\\2. Test\\Projekt\\Vorlage\\Icons 24Px\\back28 (1).png")); // NOI18N
+        imageButton1.setText("imageButton1");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnOptions.add(imageButton1, gridBagConstraints);
+
+        imageButton2.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\OneDrive\\3CHIF\\POS\\Java\\2. Test\\Projekt\\Vorlage\\Icons 24Px\\right127 (1).png")); // NOI18N
+        imageButton2.setText("imageButton2");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnOptions.add(imageButton2, gridBagConstraints);
+
+        imageButton3.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\OneDrive\\3CHIF\\POS\\Java\\2. Test\\Projekt\\Vorlage\\Icons 24Px\\close33 (1).png")); // NOI18N
+        imageButton3.setText("imageButton3");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnOptions.add(imageButton3, gridBagConstraints);
+
+        imageButton4.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\OneDrive\\3CHIF\\POS\\Java\\2. Test\\Projekt\\Vorlage\\Icons 24Px\\menu33 (1).png")); // NOI18N
+        imageButton4.setText("imageButton4");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        pnOptions.add(imageButton4, gridBagConstraints);
 
         getContentPane().add(pnOptions, java.awt.BorderLayout.PAGE_START);
 
@@ -178,7 +186,12 @@ public class ClientGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     public static void main(String args[]) {
-
+        //Use Windows Look&Feel
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            System.err.println(e);
+        }
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new ClientGUI().setVisible(true);
@@ -187,10 +200,10 @@ public class ClientGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btCancel;
-    private javax.swing.JButton btClientToServer;
-    private javax.swing.JButton btServerManager;
-    private javax.swing.JButton btServerToClient;
+    private at.petritzdesigns.ImageButton imageButton1;
+    private at.petritzdesigns.ImageButton imageButton2;
+    private at.petritzdesigns.ImageButton imageButton3;
+    private at.petritzdesigns.ImageButton imageButton4;
     private javax.swing.JList jList1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
@@ -205,4 +218,9 @@ public class ClientGUI extends javax.swing.JFrame {
     private javax.swing.JTextField tfIP;
     private javax.swing.JTextField tfPort;
     // End of variables declaration//GEN-END:variables
+
+    private void initGuiElements() {
+        Color col = new Color(240, 240, 240);
+        
+    }
 }
