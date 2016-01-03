@@ -63,6 +63,10 @@ public class ImageButton extends JButton {
 
         //clear
         g.clearRect(0, 0, w, h);
+
+        //draw background color
+        g.setColor(getBackground());
+        g.fillRect(0, 0, w, h);
         
         try {
             BufferedImage img = ImageHelper.toBufferedImage(getIcon());
