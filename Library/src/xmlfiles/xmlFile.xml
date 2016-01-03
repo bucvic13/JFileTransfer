@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    
+   <Directory name="Beispiel Ordner" size="25">
+        <File size="600">Dokument.docx</File>   
+   </Directory>
+   
+        <File size="500">Unterlagen.txt</File>
+        <Movie length="1:20" size="1200">Steve Jobs</Movie>
+    
+</root>
