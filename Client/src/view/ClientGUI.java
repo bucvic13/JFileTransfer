@@ -1,9 +1,11 @@
 package view;
 
+import commands.TreeCommand;
 import java.awt.Color;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import network.Client;
+import protocol.Protocol;
 
 /**
  * Client GUI
@@ -18,7 +20,16 @@ public class ClientGUI extends javax.swing.JFrame {
     public ClientGUI() {
         initComponents();
         initGuiElements();
+    }
 
+    private void sampleCommandTest() throws Exception {
+        String cmd = Protocol.getDefaultInstance().createCommand(TreeCommand.class, null);
+        if (client.isListening()) {
+            String response = client.sendCommand(cmd);
+            System.out.println("got response: " + response);
+        } else {
+            System.out.println("not listening");
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -36,6 +47,7 @@ public class ClientGUI extends javax.swing.JFrame {
         btServerToClient = new at.petritzdesigns.ImageButton();
         btStop = new at.petritzdesigns.ImageButton();
         btServerManager = new at.petritzdesigns.ImageButton();
+        btStart = new at.petritzdesigns.ImageButton();
         pnData = new javax.swing.JPanel();
         tbLocal = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -92,7 +104,6 @@ public class ClientGUI extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         pnOptions.add(tfPort, gridBagConstraints);
 
-        btClientToServer.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\OneDrive\\3CHIF\\POS\\Java\\2. Test\\Projekt\\Vorlage\\Icons 24Px\\back28 (1).png")); // NOI18N
         btClientToServer.setText("imageButton1");
         btClientToServer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -106,7 +117,6 @@ public class ClientGUI extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         pnOptions.add(btClientToServer, gridBagConstraints);
 
-        btServerToClient.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\OneDrive\\3CHIF\\POS\\Java\\2. Test\\Projekt\\Vorlage\\Icons 24Px\\right127 (1).png")); // NOI18N
         btServerToClient.setText("imageButton2");
         btServerToClient.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -120,7 +130,6 @@ public class ClientGUI extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         pnOptions.add(btServerToClient, gridBagConstraints);
 
-        btStop.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\OneDrive\\3CHIF\\POS\\Java\\2. Test\\Projekt\\Vorlage\\Icons 24Px\\close33 (1).png")); // NOI18N
         btStop.setText("imageButton3");
         btStop.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -134,7 +143,6 @@ public class ClientGUI extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         pnOptions.add(btStop, gridBagConstraints);
 
-        btServerManager.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\OneDrive\\3CHIF\\POS\\Java\\2. Test\\Projekt\\Vorlage\\Icons 24Px\\menu33 (1).png")); // NOI18N
         btServerManager.setText("imageButton4");
         btServerManager.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -147,6 +155,19 @@ public class ClientGUI extends javax.swing.JFrame {
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         pnOptions.add(btServerManager, gridBagConstraints);
+
+        btStart.setText("imageButton1");
+        btStart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onStart(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        pnOptions.add(btStart, gridBagConstraints);
 
         getContentPane().add(pnOptions, java.awt.BorderLayout.PAGE_START);
 
@@ -208,35 +229,69 @@ public class ClientGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void onClientToServer(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onClientToServer
-
-        try {
-            
-            if((tfIP.getText()).isEmpty() || (tfPort.getText()).isEmpty())
-            {
-                JOptionPane.showMessageDialog(this, "You have to fill in all fields");
-            }
-
-            client = new Client(tfIP.getText(),
-                    Integer.parseInt(tfPort.getText()));
-            client.connectToServer();
-
-        } catch (Exception e) {
-        }
-
-
+        //Datei auswählen (Lokal) die man zum server kopieren will
     }//GEN-LAST:event_onClientToServer
 
     private void onServerToClient(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onServerToClient
-        // TODO add your handling code here:
+        //Datei auswählen (Server) die man zum client kopieren will
     }//GEN-LAST:event_onServerToClient
 
     private void onStop(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onStop
-        // TODO add your handling code here:
+        //Verbindung zum Server unterbrechen
+        try {
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        if (client.isListening()) {
+                            client.disconnect();
+                            btStart.setEnabled(true);
+                            btStop.setEnabled(false);
+                        }
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, e.getMessage());
+                    }
+                }
+            }).start();
+        } catch (Exception e) {
+            //TODO: joptionpane
+        }
     }//GEN-LAST:event_onStop
 
     private void onServerManager(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onServerManager
-        // TODO add your handling code here:
+        //Startet ServerManager GUI
     }//GEN-LAST:event_onServerManager
+
+    private void onStart(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onStart
+
+        try {
+
+            if ((tfIP.getText()).isEmpty() || (tfPort.getText()).isEmpty()) {
+                throw new Exception("You have to fill in all fields");
+            }
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        client = new Client(tfIP.getText(), Integer.parseInt(tfPort.getText()));
+                        client.connect();
+                        btStart.setEnabled(false);
+                        btStop.setEnabled(true);
+
+                        //Test only
+                        sampleCommandTest();
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, e.getMessage());
+                    }
+                }
+            }).start();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_onStart
 
     public static void main(String args[]) {
         //Use Windows Look&Feel
@@ -256,6 +311,7 @@ public class ClientGUI extends javax.swing.JFrame {
     private at.petritzdesigns.ImageButton btClientToServer;
     private at.petritzdesigns.ImageButton btServerManager;
     private at.petritzdesigns.ImageButton btServerToClient;
+    private at.petritzdesigns.ImageButton btStart;
     private at.petritzdesigns.ImageButton btStop;
     private javax.swing.JList jList1;
     private javax.swing.JScrollPane jScrollPane3;
@@ -278,5 +334,11 @@ public class ClientGUI extends javax.swing.JFrame {
         btServerToClient.setBackground(col);
         btStop.setBackground(col);
         btServerManager.setBackground(col);
+
+        btStart.setEnabled(true);
+        btStop.setEnabled(false);
+        btServerManager.setEnabled(true);
+        btClientToServer.setEnabled(false); //nur enabled wenn datei ausgewählt (auf der lokalen tabelle)
+        btServerToClient.setEnabled(false);//nur enabled when datei ausgewählt ist (auf der server tabelle)
     }
 }

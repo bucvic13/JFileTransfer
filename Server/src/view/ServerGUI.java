@@ -146,8 +146,7 @@ public class ServerGUI extends javax.swing.JFrame {
                     tfRootDirectory.setText(f.toString());
 
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(this,
-                            "Error while opening..." + ex.toString());
+                    throw new Exception("Error while opening..." + ex.toString());
                 }
             }
         } catch (Exception ex) {
@@ -161,9 +160,7 @@ public class ServerGUI extends javax.swing.JFrame {
             String root = tfRootDirectory.getText();
 
             if (root.isEmpty()) {
-                JOptionPane.showMessageDialog(this,
-                        "You have to choose a Root Directory");
-               return;
+                throw new Exception("You have to choose a Root Directory");
             }
 
             if (server != null && server.isRunning()) {
@@ -178,7 +175,8 @@ public class ServerGUI extends javax.swing.JFrame {
                 btStartServer.setText("Stop Server");
             }
 
-        } catch (Exception e) {
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_onStartServer
     public static void main(String args[]) {

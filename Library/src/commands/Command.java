@@ -6,24 +6,29 @@ import java.util.List;
 import java.util.Objects;
 
 public abstract class Command {
-    
+
     private final String name;
 
     public Command(String name) {
         this.name = name;
     }
-    
+
     public abstract void execute(File root, PrintWriter out);
-    
+
     public String make(List<String> parameter) {
-        StringBuilder params = new StringBuilder();
-        for (String pa : parameter) {
-            params.append(pa).append(" ");
+        String paramStr = "";
+
+        if (parameter != null) {
+            StringBuilder params = new StringBuilder();
+            for (String pa : parameter) {
+                params.append(pa).append(" ");
+            }
+            paramStr = params.toString().substring(0, params.length() - 1);
         }
-        String paramStr = params.toString().substring(0, params.length() - 1);
+
         return String.format("%s:%s", name, paramStr);
     }
-    
+
     public String getName() {
         return name;
     }
