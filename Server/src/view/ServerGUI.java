@@ -2,10 +2,11 @@ package view;
 
 import java.awt.Color;
 import java.io.File;
-import java.io.IOException;
+import java.net.UnknownHostException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+import network.Server;
 
 /**
  *
@@ -16,9 +17,10 @@ public class ServerGUI extends javax.swing.JFrame {
     private String pfad = System.getProperty("user.dir") + System.getProperty("file.separator")
             + "src" + System.getProperty("file.separator");
     
+    private Server server;
+    
     public ServerGUI() {
         initComponents();
-        
         initGuiElements();
     }
 
@@ -55,6 +57,11 @@ public class ServerGUI extends javax.swing.JFrame {
         pnStart.setLayout(new java.awt.GridLayout(1, 0));
 
         btStartServer.setText("Start Server");
+        btStartServer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onStartServer(evt);
+            }
+        });
         pnStart.add(btStartServer);
 
         getContentPane().add(pnStart, java.awt.BorderLayout.PAGE_END);
@@ -144,6 +151,24 @@ public class ServerGUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_onChooseFile
+
+    private void onStartServer(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onStartServer
+        try {
+            if (server != null && server.isRunning()) {
+                server.stop();
+                
+                btStartServer.setText("Start Server");
+            } else {
+                //TODO plausi for root directory
+                server = new Server(5602, new File(".")); //TODO port from gui, root directory
+                server.start();
+                
+                btStartServer.setText("Stop Server");
+            }
+            
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_onStartServer
     public static void main(String args[]) {
         //Use Windows Look&Feel
         try {
@@ -174,8 +199,12 @@ public class ServerGUI extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void initGuiElements() {
-        
         tfIP.setEnabled(false);
+        try {
+            tfIP.setText(Server.getIp());
+        } catch (UnknownHostException ex) {
+            //TODO: Joptionpane
+        }
         Color col = new Color(240, 240, 240);
         btRootDirectory.setBackground(col);
         
