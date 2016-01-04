@@ -17,7 +17,7 @@ import protocol.Protocol;
 /**
  * Server
  *
- * @author Markus Petritz
+ * @author Viktoria Buchegger
  * @version 1.0.0
  */
 public class Server {
@@ -45,7 +45,7 @@ public class Server {
                     int client = 0;
                     listener = new ServerSocket(port);
                     System.out.println("Server started at port: " + port);
-                    
+
                     try {
                         while (running) {
                             new Handler(listener.accept(), client++).start();
@@ -62,22 +62,10 @@ public class Server {
 
     public void stop() throws IOException {
         running = false;
-        if(listener != null) {
+        if (listener != null) {
             listener.close();
             System.out.println("Server stopped");
         }
-    }
-
-    public Integer getPort() {
-        return port;
-    }
-
-    public static String getIp() throws UnknownHostException {
-        return InetAddress.getLocalHost().getCanonicalHostName();
-    }
-
-    public boolean isRunning() {
-        return running;
     }
 
     private class Handler extends Thread {
@@ -132,4 +120,17 @@ public class Server {
             }
         }
     }
+
+    public Integer getPort() {
+        return port;
+    }
+
+    public static String getIp() throws UnknownHostException {
+        return InetAddress.getLocalHost().getCanonicalHostName();
+    }
+
+    public boolean isRunning() {
+        return running;
+    }
+
 }

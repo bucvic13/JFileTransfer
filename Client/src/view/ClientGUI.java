@@ -1,13 +1,19 @@
 package view;
 
 import java.awt.Color;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+import network.Client;
 
 /**
+ * Client GUI
  *
  * @author Viktoria Buchegger
+ * @version 1.0.0
  */
 public class ClientGUI extends javax.swing.JFrame {
+
+    private Client client;
 
     public ClientGUI() {
         initComponents();
@@ -28,7 +34,7 @@ public class ClientGUI extends javax.swing.JFrame {
         tfPort = new javax.swing.JTextField();
         btClientToServer = new at.petritzdesigns.ImageButton();
         btServerToClient = new at.petritzdesigns.ImageButton();
-        btCancel = new at.petritzdesigns.ImageButton();
+        btStop = new at.petritzdesigns.ImageButton();
         btServerManager = new at.petritzdesigns.ImageButton();
         pnData = new javax.swing.JPanel();
         tbLocal = new javax.swing.JScrollPane();
@@ -88,6 +94,11 @@ public class ClientGUI extends javax.swing.JFrame {
 
         btClientToServer.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\OneDrive\\3CHIF\\POS\\Java\\2. Test\\Projekt\\Vorlage\\Icons 24Px\\back28 (1).png")); // NOI18N
         btClientToServer.setText("imageButton1");
+        btClientToServer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onClientToServer(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -97,6 +108,11 @@ public class ClientGUI extends javax.swing.JFrame {
 
         btServerToClient.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\OneDrive\\3CHIF\\POS\\Java\\2. Test\\Projekt\\Vorlage\\Icons 24Px\\right127 (1).png")); // NOI18N
         btServerToClient.setText("imageButton2");
+        btServerToClient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onServerToClient(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
@@ -104,17 +120,27 @@ public class ClientGUI extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         pnOptions.add(btServerToClient, gridBagConstraints);
 
-        btCancel.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\OneDrive\\3CHIF\\POS\\Java\\2. Test\\Projekt\\Vorlage\\Icons 24Px\\close33 (1).png")); // NOI18N
-        btCancel.setText("imageButton3");
+        btStop.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\OneDrive\\3CHIF\\POS\\Java\\2. Test\\Projekt\\Vorlage\\Icons 24Px\\close33 (1).png")); // NOI18N
+        btStop.setText("imageButton3");
+        btStop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onStop(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        pnOptions.add(btCancel, gridBagConstraints);
+        pnOptions.add(btStop, gridBagConstraints);
 
         btServerManager.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\OneDrive\\3CHIF\\POS\\Java\\2. Test\\Projekt\\Vorlage\\Icons 24Px\\menu33 (1).png")); // NOI18N
         btServerManager.setText("imageButton4");
+        btServerManager.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onServerManager(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
@@ -181,6 +207,37 @@ public class ClientGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void onClientToServer(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onClientToServer
+
+        try {
+            
+            if((tfIP.getText()).isEmpty() || (tfPort.getText()).isEmpty())
+            {
+                JOptionPane.showMessageDialog(this, "You have to fill in all fields");
+            }
+
+            client = new Client(tfIP.getText(),
+                    Integer.parseInt(tfPort.getText()));
+            client.connectToServer();
+
+        } catch (Exception e) {
+        }
+
+
+    }//GEN-LAST:event_onClientToServer
+
+    private void onServerToClient(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onServerToClient
+        // TODO add your handling code here:
+    }//GEN-LAST:event_onServerToClient
+
+    private void onStop(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onStop
+        // TODO add your handling code here:
+    }//GEN-LAST:event_onStop
+
+    private void onServerManager(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onServerManager
+        // TODO add your handling code here:
+    }//GEN-LAST:event_onServerManager
+
     public static void main(String args[]) {
         //Use Windows Look&Feel
         try {
@@ -196,10 +253,10 @@ public class ClientGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private at.petritzdesigns.ImageButton btCancel;
     private at.petritzdesigns.ImageButton btClientToServer;
     private at.petritzdesigns.ImageButton btServerManager;
     private at.petritzdesigns.ImageButton btServerToClient;
+    private at.petritzdesigns.ImageButton btStop;
     private javax.swing.JList jList1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
@@ -219,7 +276,7 @@ public class ClientGUI extends javax.swing.JFrame {
         Color col = new Color(240, 240, 240);
         btClientToServer.setBackground(col);
         btServerToClient.setBackground(col);
-        btCancel.setBackground(col);
+        btStop.setBackground(col);
         btServerManager.setBackground(col);
     }
 }

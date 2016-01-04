@@ -9,8 +9,10 @@ import javax.swing.UIManager;
 import network.Server;
 
 /**
+ * ServerGUI
  *
  * @author Viktoria Buchegger
+ * @version 1.0.0
  */
 public class ServerGUI extends javax.swing.JFrame {
 
@@ -144,7 +146,8 @@ public class ServerGUI extends javax.swing.JFrame {
                     tfRootDirectory.setText(f.toString());
 
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(this, "Error while opening..." + ex.toString());
+                    JOptionPane.showMessageDialog(this,
+                            "Error while opening..." + ex.toString());
                 }
             }
         } catch (Exception ex) {
@@ -154,20 +157,22 @@ public class ServerGUI extends javax.swing.JFrame {
 
     private void onStartServer(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onStartServer
         try {
+
+            String root = tfRootDirectory.getText();
+
+            if (root.isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "You have to choose a Root Directory");
+               return;
+            }
+
             if (server != null && server.isRunning()) {
                 server.stop();
                 btStartServer.setText("Start Server");
             } else {
-                
-                String rootDirectory = tfRootDirectory.getText();
-                
-                if(rootDirectory.isEmpty())
-                {
-                    JOptionPane.showMessageDialog(this, "You have to choose a Root Directory");
-                }
-                
+
                 server = new Server(Integer.parseInt(tfPort.getText()),
-                        new File(rootDirectory)); //TODO port from gui, root directory
+                        new File(root));
                 server.start();
 
                 btStartServer.setText("Stop Server");
