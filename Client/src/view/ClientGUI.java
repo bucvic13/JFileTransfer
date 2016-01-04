@@ -104,6 +104,7 @@ public class ClientGUI extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         pnOptions.add(tfPort, gridBagConstraints);
 
+        btClientToServer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/src/back.png"))); // NOI18N
         btClientToServer.setText("imageButton1");
         btClientToServer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -117,6 +118,7 @@ public class ClientGUI extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         pnOptions.add(btClientToServer, gridBagConstraints);
 
+        btServerToClient.setIcon(new javax.swing.ImageIcon(getClass().getResource("/src/right.png"))); // NOI18N
         btServerToClient.setText("imageButton2");
         btServerToClient.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -130,6 +132,7 @@ public class ClientGUI extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         pnOptions.add(btServerToClient, gridBagConstraints);
 
+        btStop.setIcon(new javax.swing.ImageIcon(getClass().getResource("/src/close.png"))); // NOI18N
         btStop.setText("imageButton3");
         btStop.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -143,6 +146,7 @@ public class ClientGUI extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         pnOptions.add(btStop, gridBagConstraints);
 
+        btServerManager.setIcon(new javax.swing.ImageIcon(getClass().getResource("/src/menu.png"))); // NOI18N
         btServerManager.setText("imageButton4");
         btServerManager.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

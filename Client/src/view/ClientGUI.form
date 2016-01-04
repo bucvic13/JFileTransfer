@@ -89,6 +89,9 @@
         </Component>
         <Component class="at.petritzdesigns.ImageButton" name="btClientToServer">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/src/back.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="imageButton1"/>
           </Properties>
           <Events>
@@ -102,6 +105,9 @@
         </Component>
         <Component class="at.petritzdesigns.ImageButton" name="btServerToClient">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/src/right.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="imageButton2"/>
           </Properties>
           <Events>
@@ -115,6 +121,9 @@
         </Component>
         <Component class="at.petritzdesigns.ImageButton" name="btStop">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/src/close.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="imageButton3"/>
           </Properties>
           <Events>
@@ -128,6 +137,9 @@
         </Component>
         <Component class="at.petritzdesigns.ImageButton" name="btServerManager">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/src/menu.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="imageButton4"/>
           </Properties>
           <Events>
