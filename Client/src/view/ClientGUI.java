@@ -26,10 +26,10 @@ public class ClientGUI extends javax.swing.JFrame {
         lbPort = new javax.swing.JLabel();
         tfIP = new javax.swing.JTextField();
         tfPort = new javax.swing.JTextField();
-        imageButton1 = new at.petritzdesigns.ImageButton();
-        imageButton2 = new at.petritzdesigns.ImageButton();
-        imageButton3 = new at.petritzdesigns.ImageButton();
-        imageButton4 = new at.petritzdesigns.ImageButton();
+        btClientToServer = new at.petritzdesigns.ImageButton();
+        btServerToClient = new at.petritzdesigns.ImageButton();
+        btCancel = new at.petritzdesigns.ImageButton();
+        btServerManager = new at.petritzdesigns.ImageButton();
         pnData = new javax.swing.JPanel();
         tbLocal = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -86,45 +86,41 @@ public class ClientGUI extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
         pnOptions.add(tfPort, gridBagConstraints);
 
-        imageButton1.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\OneDrive\\3CHIF\\POS\\Java\\2. Test\\Projekt\\Vorlage\\Icons 24Px\\back28 (1).png")); // NOI18N
-        imageButton1.setText("imageButton1");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        pnOptions.add(imageButton1, gridBagConstraints);
-
-        imageButton2.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\OneDrive\\3CHIF\\POS\\Java\\2. Test\\Projekt\\Vorlage\\Icons 24Px\\right127 (1).png")); // NOI18N
-        imageButton2.setText("imageButton2");
+        btClientToServer.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\OneDrive\\3CHIF\\POS\\Java\\2. Test\\Projekt\\Vorlage\\Icons 24Px\\back28 (1).png")); // NOI18N
+        btClientToServer.setText("imageButton1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        pnOptions.add(imageButton2, gridBagConstraints);
+        pnOptions.add(btClientToServer, gridBagConstraints);
 
-        imageButton3.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\OneDrive\\3CHIF\\POS\\Java\\2. Test\\Projekt\\Vorlage\\Icons 24Px\\close33 (1).png")); // NOI18N
-        imageButton3.setText("imageButton3");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        pnOptions.add(imageButton3, gridBagConstraints);
-
-        imageButton4.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\OneDrive\\3CHIF\\POS\\Java\\2. Test\\Projekt\\Vorlage\\Icons 24Px\\menu33 (1).png")); // NOI18N
-        imageButton4.setText("imageButton4");
+        btServerToClient.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\OneDrive\\3CHIF\\POS\\Java\\2. Test\\Projekt\\Vorlage\\Icons 24Px\\right127 (1).png")); // NOI18N
+        btServerToClient.setText("imageButton2");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        pnOptions.add(imageButton4, gridBagConstraints);
+        pnOptions.add(btServerToClient, gridBagConstraints);
+
+        btCancel.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\OneDrive\\3CHIF\\POS\\Java\\2. Test\\Projekt\\Vorlage\\Icons 24Px\\close33 (1).png")); // NOI18N
+        btCancel.setText("imageButton3");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        pnOptions.add(btCancel, gridBagConstraints);
+
+        btServerManager.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\OneDrive\\3CHIF\\POS\\Java\\2. Test\\Projekt\\Vorlage\\Icons 24Px\\menu33 (1).png")); // NOI18N
+        btServerManager.setText("imageButton4");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        pnOptions.add(btServerManager, gridBagConstraints);
 
         getContentPane().add(pnOptions, java.awt.BorderLayout.PAGE_START);
 
@@ -200,10 +196,10 @@ public class ClientGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private at.petritzdesigns.ImageButton imageButton1;
-    private at.petritzdesigns.ImageButton imageButton2;
-    private at.petritzdesigns.ImageButton imageButton3;
-    private at.petritzdesigns.ImageButton imageButton4;
+    private at.petritzdesigns.ImageButton btCancel;
+    private at.petritzdesigns.ImageButton btClientToServer;
+    private at.petritzdesigns.ImageButton btServerManager;
+    private at.petritzdesigns.ImageButton btServerToClient;
     private javax.swing.JList jList1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
@@ -221,6 +217,9 @@ public class ClientGUI extends javax.swing.JFrame {
 
     private void initGuiElements() {
         Color col = new Color(240, 240, 240);
-        
+        btClientToServer.setBackground(col);
+        btServerToClient.setBackground(col);
+        btCancel.setBackground(col);
+        btServerManager.setBackground(col);
     }
 }

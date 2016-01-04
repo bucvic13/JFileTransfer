@@ -13,12 +13,12 @@ import network.Server;
  * @author Viktoria Buchegger
  */
 public class ServerGUI extends javax.swing.JFrame {
-    
+
     private String pfad = System.getProperty("user.dir") + System.getProperty("file.separator")
             + "src" + System.getProperty("file.separator");
-    
+
     private Server server;
-    
+
     public ServerGUI() {
         initComponents();
         initGuiElements();
@@ -142,7 +142,7 @@ public class ServerGUI extends javax.swing.JFrame {
                 try {
                     File f = chooser.getSelectedFile();
                     tfRootDirectory.setText(f.toString());
-                    
+
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, "Error while opening..." + ex.toString());
                 }
@@ -156,16 +156,23 @@ public class ServerGUI extends javax.swing.JFrame {
         try {
             if (server != null && server.isRunning()) {
                 server.stop();
-                
                 btStartServer.setText("Start Server");
             } else {
-                //TODO plausi for root directory
-                server = new Server(5602, new File(".")); //TODO port from gui, root directory
-                server.start();
                 
+                String rootDirectory = tfRootDirectory.getText();
+                
+                if(rootDirectory.isEmpty())
+                {
+                    JOptionPane.showMessageDialog(this, "You have to choose a Root Directory");
+                }
+                
+                server = new Server(Integer.parseInt(tfPort.getText()),
+                        new File(rootDirectory)); //TODO port from gui, root directory
+                server.start();
+
                 btStartServer.setText("Stop Server");
             }
-            
+
         } catch (Exception e) {
         }
     }//GEN-LAST:event_onStartServer
@@ -203,10 +210,10 @@ public class ServerGUI extends javax.swing.JFrame {
         try {
             tfIP.setText(Server.getIp());
         } catch (UnknownHostException ex) {
-            //TODO: Joptionpane
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
         Color col = new Color(240, 240, 240);
         btRootDirectory.setBackground(col);
-        
+
     }
 }
