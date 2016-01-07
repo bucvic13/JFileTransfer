@@ -4,8 +4,6 @@ import Client.ServerManager.ServerManagerGUI;
 import Client.data.DataFile;
 import Client.model.ClientModel;
 import Client.network.Client;
-import Library.commands.TreeCommand;
-import Library.protocol.Protocol;
 import java.awt.Color;
 import java.io.File;
 import javax.swing.JOptionPane;
@@ -18,33 +16,32 @@ import javax.swing.UIManager;
  * @version 1.0.0
  */
 public class ClientGUI extends javax.swing.JFrame {
-    
+
     private Client client;
     private ClientModel modelServer, modelLocal;
     private DataFile data;
-    
+
     public ClientGUI() {
         initComponents();
         initGuiElements();
-        
+
         modelLocal = new ClientModel();
         modelServer = new ClientModel();
-        
+
         tbLocal.setModel(modelLocal);
         tbServer.setModel(modelServer);
 
         //addTestData();
     }
-    
+
     public void addTestData() {
         modelLocal.addTestdaten();
         modelServer.addTestdaten();
     }
-    
+
     private void sampleCommandTest() throws Exception {
-        String cmd = Protocol.getDefaultInstance().createCommand(TreeCommand.class, null);
         if (client.isListening()) {
-            String response = client.sendCommand(cmd);
+            String response = client.sendCommand("tree");
             System.out.println("got response: " + response);
             //TODO parse response and load model with data
             modelServer.parseResponse(response);
@@ -52,7 +49,7 @@ public class ClientGUI extends javax.swing.JFrame {
             System.out.println("not listening");
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -291,9 +288,9 @@ public class ClientGUI extends javax.swing.JFrame {
             if (data == null) {
                 throw new Exception("Please chose a File from Local");
             }
-            
+
             JOptionPane.showMessageDialog(this, data + "will be moved to the Server");
-            
+
         } catch (Exception e) {
         }
     }//GEN-LAST:event_onClientToServer
@@ -304,9 +301,9 @@ public class ClientGUI extends javax.swing.JFrame {
             if (data == null) {
                 throw new Exception("Please chose a File from Server");
             }
-            
+
             JOptionPane.showMessageDialog(this, data + "will be moved to the Client");
-            
+
         } catch (Exception e) {
         }
     }//GEN-LAST:event_onServerToClient
@@ -314,22 +311,12 @@ public class ClientGUI extends javax.swing.JFrame {
     private void onStop(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onStop
         //Verbindung zum Server unterbrechen
         try {
-            
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        if (client.isListening()) {
-                            client.disconnect();
-                            btStart.setEnabled(true);
-                            btStop.setEnabled(false);
-                            
-                        }
-                    } catch (Exception e) {
-                        JOptionPane.showMessageDialog(null, e.getMessage());
-                    }
-                }
-            }).start();
+            if (client.isListening()) {
+                client.disconnect();
+                btStart.setEnabled(true);
+                btStop.setEnabled(false);
+
+            }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
@@ -338,39 +325,30 @@ public class ClientGUI extends javax.swing.JFrame {
     private void onServerManager(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onServerManager
         //Startet ServerManager GUI
         try {
-            
+
             this.setVisible(false);
             ServerManagerGUI dlg = new ServerManagerGUI();
             dlg.setVisible(true);
-            
+
         } catch (Exception e) {
         }
     }//GEN-LAST:event_onServerManager
 
     private void onStart(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onStart
-        
+
         try {
-            
+
             if ((tfIP.getText()).isEmpty() || (tfPort.getText()).isEmpty()) {
                 throw new Exception("You have to fill in all fields");
             }
-            
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        client = new Client(tfIP.getText(), Integer.parseInt(tfPort.getText()));
-                        client.connect();
-                        btStart.setEnabled(false);
-                        btStop.setEnabled(true);
 
-                        //Test only
-                        sampleCommandTest();
-                    } catch (Exception e) {
-                        JOptionPane.showMessageDialog(null, e.getMessage());
-                    }
-                }
-            }).start();
+            client = new Client(tfIP.getText(), Integer.parseInt(tfPort.getText()));
+            client.connect();
+            btStart.setEnabled(false);
+            btStop.setEnabled(true);
+
+            //Test only
+            sampleCommandTest();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
@@ -378,28 +356,47 @@ public class ClientGUI extends javax.swing.JFrame {
 
     private void tbLocalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbLocalMouseClicked
         try {
-            
+
             btClientToServer.setEnabled(true);
             btServerToClient.setEnabled(false);
             int index = tbLocal.getSelectedRow();
             data = modelLocal.getElement(index);
-            
+
         } catch (Exception e) {
         }
     }//GEN-LAST:event_tbLocalMouseClicked
 
     private void tbServerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbServerMouseClicked
         try {
-            
+
             btServerToClient.setEnabled(true);
             btClientToServer.setEnabled(false);
             int index = tbServer.getSelectedRow();
             data = modelServer.getElement(index);
-            
+
         } catch (Exception e) {
         }
     }//GEN-LAST:event_tbServerMouseClicked
-    
+
+    private void initGuiElements() {
+        Color col = new Color(240, 240, 240);
+        btClientToServer.setBackground(col);
+        btServerToClient.setBackground(col);
+        btStop.setBackground(col);
+        btServerManager.setBackground(col);
+
+        btStart.setEnabled(true);
+        btStop.setEnabled(false);
+        btServerManager.setEnabled(true);
+        btClientToServer.setEnabled(false); //nur enabled wenn datei ausgewählt (auf der lokalen tabelle)
+        btServerToClient.setEnabled(false);//nur enabled when datei ausgewählt ist (auf der server tabelle)
+    }
+
+    public void setPath(File local, File server) {
+        lbLocalPath.setText("" + local);
+        lbServerPath.setText("" + server);
+    }
+
     public static void main(String args[]) {
         //Use Windows Look&Feel
         try {
@@ -444,22 +441,4 @@ public class ClientGUI extends javax.swing.JFrame {
     private javax.swing.JTextField tfPort;
     // End of variables declaration//GEN-END:variables
 
-    private void initGuiElements() {
-        Color col = new Color(240, 240, 240);
-        btClientToServer.setBackground(col);
-        btServerToClient.setBackground(col);
-        btStop.setBackground(col);
-        btServerManager.setBackground(col);
-        
-        btStart.setEnabled(true);
-        btStop.setEnabled(false);
-        btServerManager.setEnabled(true);
-        btClientToServer.setEnabled(false); //nur enabled wenn datei ausgewählt (auf der lokalen tabelle)
-        btServerToClient.setEnabled(false);//nur enabled when datei ausgewählt ist (auf der server tabelle)
-    }
-    
-    public void setPath(File local, File server) {
-        lbLocalPath.setText("" + local);
-        lbServerPath.setText("" + server);
-    }
 }

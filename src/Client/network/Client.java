@@ -1,6 +1,5 @@
 package Client.network;
 
-import Library.protocol.Protocol;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -37,8 +36,7 @@ public class Client {
         socket = new Socket(ip, port);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
-        int id = Protocol.getDefaultInstance().parseWelcomeMessage(in.readLine());
-        System.out.println("Connected as client #" + id);
+        System.out.println("Connected");
         listening = true;
     }
     

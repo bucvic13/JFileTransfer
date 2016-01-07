@@ -1,7 +1,5 @@
 package Server.network;
 
-import Library.commands.CommandData;
-import Library.protocol.Protocol;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -10,6 +8,10 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 /**
  * Server
@@ -35,32 +37,19 @@ public class Server {
             throw new Exception("Server is already running");
         }
 
+        serverSocket = new ServerSocket(port);
+        System.out.println("Server started at port: " + port);
+
         running = true;
 
-        new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                try {
-                    int client = 0;
-                    serverSocket = new ServerSocket(port);
-                    System.out.println("Server started at port: " + port);
-
-                    try {
-                        while (running) {
-                            new Handler(serverSocket.accept(), client++).start();
-                        }
-
-                    } finally {
-                        stop();
-                    }
-
-                } catch (Exception e) {
-                    System.err.println(e.getMessage());
-                }
+        try {
+            while (running) {
+                new Handler(serverSocket.accept()).start();
             }
 
-        }).start();
+        } finally {
+            stop();
+        }
     }
 
     public void stop() throws Exception {
@@ -74,25 +63,19 @@ public class Server {
     private class Handler extends Thread {
 
         private final Socket socket;
-        private final int client;
-        private final Protocol protocol;
+        private BufferedReader in;
+        private PrintWriter out;
 
-        public Handler(Socket socket, int client) {
+        public Handler(Socket socket) {
             this.socket = socket;
-            this.client = client;
-            this.protocol = Protocol.getDefaultInstance();
-            //TODO: write logger class
-            System.out.println("New connection with client #" + this.client
-                    + " at " + socket);
+            System.out.println("New connection with client at " + socket);
         }
 
         @Override
         public void run() {
             try {
-                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-
-                out.println(protocol.createWelcomeMessage(client));
+                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                out = new PrintWriter(socket.getOutputStream(), true);
 
                 //wait for commands
                 while (running) {
@@ -101,27 +84,50 @@ public class Server {
                         break;
                     }
 
-                    //Log
-                    System.out.println("Got command: " + command);
-
                     try {
-                        CommandData data = protocol.parseCommand(command);
-                        data.execute(root, out);
+                        switch (command) {
+                            case "tree":
+                                generateXml();
+                                break;
+                        }
                     } catch (Exception e) {
-                        out.println(protocol.createErrorMessage(e.getMessage()));
+                        out.printf("Fehler: " + e);
                     }
                 }
 
             } catch (Exception e) {
-                System.err.println("Error handling client #" + client + ": " + e);
+                System.err.println("Error: " + e);
             } finally {
                 try {
                     socket.close();
                 } catch (Exception e) {
                     System.err.println("Could not close socket");
                 }
-                System.out.println("Connection with client #" + client + " closed");
+                System.out.println("Connection with client closed");
             }
+        }
+
+        public void generateXml() {
+            //TODO generate XML
+            //and return it with out.println(...)
+            System.out.println("generate XML");
+
+            Element rootElem = new Element("RootDirectory");
+            Document doc = new Document(rootElem);
+
+            for (File elem : root.listFiles()) {
+                if (!elem.isDirectory()) {
+                    Element file = new Element("File");
+//                Attribute size = new Attribute("size= ", "" + elem.getTotalSpace());
+//                file.setAttribute(size);
+                    file.setText(elem.getName());
+                    rootElem.addContent(file);
+                }
+            }
+
+            XMLOutputter xmlOutput = new XMLOutputter();
+            xmlOutput.setFormat(Format.getPrettyFormat());
+            out.println(xmlOutput); //zurückgeben an client
         }
 
     }
@@ -141,7 +147,5 @@ public class Server {
     public File getRoot() {
         return root;
     }
-    
-    
 
 }
