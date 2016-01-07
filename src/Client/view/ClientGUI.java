@@ -18,39 +18,41 @@ import javax.swing.UIManager;
  * @version 1.0.0
  */
 public class ClientGUI extends javax.swing.JFrame {
-
+    
     private Client client;
     private ClientModel modelServer, modelLocal;
     private DataFile data;
-
+    
     public ClientGUI() {
         initComponents();
         initGuiElements();
-
+        
         modelLocal = new ClientModel();
         modelServer = new ClientModel();
-
+        
         tbLocal.setModel(modelLocal);
         tbServer.setModel(modelServer);
 
         //addTestData();
     }
-
+    
     public void addTestData() {
         modelLocal.addTestdaten();
         modelServer.addTestdaten();
     }
-
+    
     private void sampleCommandTest() throws Exception {
         String cmd = Protocol.getDefaultInstance().createCommand(TreeCommand.class, null);
         if (client.isListening()) {
             String response = client.sendCommand(cmd);
             System.out.println("got response: " + response);
+            //TODO parse response and load model with data
+            modelServer.parseResponse(response);
         } else {
             System.out.println("not listening");
         }
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -67,6 +69,7 @@ public class ClientGUI extends javax.swing.JFrame {
         btServerToClient = new javax.swing.JButton();
         btServerManager = new javax.swing.JButton();
         btStart = new javax.swing.JButton();
+        imageButton1 = new at.petritzdesigns.ImageButton();
         pnData = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
         spServer = new javax.swing.JScrollPane();
@@ -204,6 +207,10 @@ public class ClientGUI extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         pnOptions.add(btStart, gridBagConstraints);
 
+        imageButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Client/src/menu.png"))); // NOI18N
+        imageButton1.setText("TODO");
+        pnOptions.add(imageButton1, new java.awt.GridBagConstraints());
+
         getContentPane().add(pnOptions, java.awt.BorderLayout.PAGE_START);
 
         pnData.setLayout(new java.awt.BorderLayout());
@@ -281,12 +288,11 @@ public class ClientGUI extends javax.swing.JFrame {
     private void onClientToServer(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onClientToServer
         //Datei auswählen (Lokal) die man zum server kopieren will
         try {
-            if(data == null)
-            {
+            if (data == null) {
                 throw new Exception("Please chose a File from Local");
             }
             
-            JOptionPane.showMessageDialog(this , data + "will be moved to the Server" );
+            JOptionPane.showMessageDialog(this, data + "will be moved to the Server");
             
         } catch (Exception e) {
         }
@@ -294,14 +300,12 @@ public class ClientGUI extends javax.swing.JFrame {
 
     private void onServerToClient(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onServerToClient
         //Datei auswählen (Server) die man zum client kopieren will
-          try {
-            if(data == null)
-            {
+        try {
+            if (data == null) {
                 throw new Exception("Please chose a File from Server");
             }
             
-              JOptionPane.showMessageDialog(this , data + "will be moved to the Client" );
-            
+            JOptionPane.showMessageDialog(this, data + "will be moved to the Client");
             
         } catch (Exception e) {
         }
@@ -310,7 +314,7 @@ public class ClientGUI extends javax.swing.JFrame {
     private void onStop(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onStop
         //Verbindung zum Server unterbrechen
         try {
-
+            
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -319,7 +323,7 @@ public class ClientGUI extends javax.swing.JFrame {
                             client.disconnect();
                             btStart.setEnabled(true);
                             btStop.setEnabled(false);
-
+                            
                         }
                     } catch (Exception e) {
                         JOptionPane.showMessageDialog(null, e.getMessage());
@@ -344,13 +348,13 @@ public class ClientGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_onServerManager
 
     private void onStart(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onStart
-
+        
         try {
-
+            
             if ((tfIP.getText()).isEmpty() || (tfPort.getText()).isEmpty()) {
                 throw new Exception("You have to fill in all fields");
             }
-
+            
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -376,7 +380,7 @@ public class ClientGUI extends javax.swing.JFrame {
         try {
             
             btClientToServer.setEnabled(true);
-             btServerToClient.setEnabled(false);
+            btServerToClient.setEnabled(false);
             int index = tbLocal.getSelectedRow();
             data = modelLocal.getElement(index);
             
@@ -395,7 +399,7 @@ public class ClientGUI extends javax.swing.JFrame {
         } catch (Exception e) {
         }
     }//GEN-LAST:event_tbServerMouseClicked
-
+    
     public static void main(String args[]) {
         //Use Windows Look&Feel
         try {
@@ -416,6 +420,7 @@ public class ClientGUI extends javax.swing.JFrame {
     private javax.swing.JButton btServerToClient;
     private javax.swing.JButton btStart;
     private javax.swing.JButton btStop;
+    private at.petritzdesigns.ImageButton imageButton1;
     private javax.swing.JList jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -445,7 +450,7 @@ public class ClientGUI extends javax.swing.JFrame {
         btServerToClient.setBackground(col);
         btStop.setBackground(col);
         btServerManager.setBackground(col);
-
+        
         btStart.setEnabled(true);
         btStop.setEnabled(false);
         btServerManager.setEnabled(true);
@@ -453,8 +458,7 @@ public class ClientGUI extends javax.swing.JFrame {
         btServerToClient.setEnabled(false);//nur enabled when datei ausgewählt ist (auf der server tabelle)
     }
     
-     public void setPath(File local, File server)
-    {
+    public void setPath(File local, File server) {
         lbLocalPath.setText("" + local);
         lbServerPath.setText("" + server);
     }
