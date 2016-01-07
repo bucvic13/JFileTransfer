@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RootDirectory>
+    
+
+    <File size="500">Unterlagen2.txt</File>
+    <File size="500">Unterlagen5.txt</File>
+    <File size="600">Dokument.docx</File>   
+    
+    <RootDirectory>
+        <File>Immunology_Ausarbeitung -2 version.docx</File>
+        <File>Immunology_Ausarbeitung.docx</File>
+        <File>~$munology_Ausarbeitung -2 version.docx</File>
+    </RootDirectory>
+
+</RootDirectory>
