@@ -118,7 +118,7 @@ public class Server {
             for (File elem : root.listFiles()) {
                 if (!elem.isDirectory()) {
                     Element file = new Element("File");
-//                Attribute size = new Attribute("size= ", "" + elem.getTotalSpace());
+//                Attribute size = new Attribute("size= ", "" + <size>);
 //                file.setAttribute(size);
                     file.setText(elem.getName());
                     rootElem.addContent(file);
