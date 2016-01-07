@@ -29,40 +29,6 @@ public class ClientModel extends AbstractTableModel {
         super.fireTableDataChanged();
     }
 
-    public void loadFiles(File rootDir) throws IOException, JDOMException {
-
-        System.out.println("loadFiles");
-        System.out.println("RootDir: " + rootDir);
-//
-//        File inputFile = new File("src/xmlfiles/files.xml");
-//        SAXBuilder saxBuilder = new SAXBuilder();
-//        Document document = saxBuilder.build(inputFile);
-//
-//        System.out.println("Root element :"
-//                + root.getName());
-//
-//        List<Element> tmpList = root.getChildren();
-//
-//        for (int i = 0; i < tmpList.size(); i++) {
-//            Element file = tmpList.get(i);
-//            String textContent = file.getText();
-//            System.out.println("File-name " + textContent);
-//        }
-
-        SAXBuilder builder = new SAXBuilder();
-        File xmlFile = new File("\\src\\Library\\xmlfiles\\files.xml");
-
-        Document document = (Document) builder.build(xmlFile);
-        Element rootNode = document.getRootElement();
-        List list = rootNode.getChildren("File");
-
-        for (int i = 0; i < list.size(); i++) {
-
-            Element node = (Element) list.get(i);
-            System.out.println("File Name : " + node.getName());
-
-        }
-    }
     
     public void parseResponse(String response) throws JDOMException, IOException {
         //TODO parse response xml
