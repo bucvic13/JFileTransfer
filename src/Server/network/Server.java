@@ -10,6 +10,9 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jdom2.Attribute;
@@ -106,7 +109,11 @@ public class Server {
                             case "tree":
                                 generateXml();
                                 break;
+                            case "get":
+                                readFile(root.toString());
+                                break;
                         }
+
                     } catch (Exception e) {
                         out.printf("Fehler: " + e);
                     }
@@ -152,6 +159,12 @@ public class Server {
             output = output.replace("\n", "").replace("\r", "");
 
             out.println(output);
+        }
+
+        private String readFile(String path) throws IOException {
+
+            byte[] encoded = Files.readAllBytes(Paths.get(path));
+            return new String(encoded, "UTF-8");
         }
 
     }

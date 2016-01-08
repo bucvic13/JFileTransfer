@@ -4,6 +4,7 @@ import Client.ServerManager.view.ServerManagerGUI;
 import Client.data.DataFile;
 import Client.model.ClientModel;
 import Client.network.Client;
+import Server.network.Server;
 import java.awt.Color;
 import java.io.File;
 import javax.swing.JFileChooser;
@@ -305,7 +306,7 @@ public class ClientGUI extends javax.swing.JFrame {
                 throw new Exception("Please chose a File from Local");
             }
 
-            JOptionPane.showMessageDialog(this, data + "will be moved to the Server");
+            JOptionPane.showMessageDialog(this, data + "will be copied to the Server");
 
         } catch (Exception e) {
         }
@@ -317,8 +318,18 @@ public class ClientGUI extends javax.swing.JFrame {
             if (data == null) {
                 throw new Exception("Please chose a File from Server");
             }
-
-            JOptionPane.showMessageDialog(this, data + "will be moved to the Client");
+            if(tfShowLocalPath.getText().isEmpty())
+            {
+                throw new Exception("You have to chose a Local File");
+            }
+            
+            JOptionPane.showMessageDialog(this, data + "will be copied to the Client");
+             Server server = new Server(Integer.parseInt(tfPort.getText()),
+                        new File(tfShowLocalPath.getText()));
+            String response = client.sendCommand("get");
+            System.out.println("got response (ServerToClient): " + response);
+            
+            
 
         } catch (Exception e) {
         }

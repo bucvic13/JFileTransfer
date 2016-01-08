@@ -106,4 +106,10 @@ public class ClientModel extends AbstractTableModel {
         }
     }
 
+    public void DateFromServerToClient(DataFile data, String localPath) {
+        
+        dataFiles.add(data);
+        super.fireTableDataChanged();
+    }
+
 }
