@@ -1,4 +1,4 @@
-package Client.data;
+package Client.bl;
 
 import java.io.File;
 
@@ -6,9 +6,9 @@ import java.io.File;
  *
  * @author Viktoria Buchegger
  */
-public class FileSize {
+public class CalculateFileSize {
 
-    public FileSize() {
+    public CalculateFileSize() {
     }
 
     //calculates the size of the File and returns it in kilobytes

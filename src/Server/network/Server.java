@@ -1,6 +1,6 @@
 package Server.network;
 
-import Client.data.FileSize;
+import Client.bl.CalculateFileSize;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -137,7 +137,7 @@ public class Server {
                     Element file = new Element("File");
 
                     //mit calcFileSize die größe der Datei berechnen lassen
-                    double size = FileSize.calcFileSize(elem);
+                    double size = CalculateFileSize.calcFileSize(elem);
 
                     Attribute sizeAtt = new Attribute("size", " = " + size);
                     file.setAttribute(sizeAtt);
