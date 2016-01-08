@@ -58,9 +58,20 @@ public class Client {
         if(socket != null && in !=  null && out != null)
         {
             out.println(cmd);
-            String response;
+            String response = "";
             try {
+                
+//                Schleife damit alle Zeilen eingelesen werden?
+//                StringBuilder sb = new StringBuilder();
+//                while((in.readLine()) != null)
+//                {
+//                     sb.append(in.readLine()); 
+//                }
+//                response = sb.toString();
+                
+                
                 response = in.readLine();
+                
                 if(response == null || response.equals("")){
                     return "";
                 }

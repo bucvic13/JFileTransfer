@@ -1,13 +1,18 @@
 package Server.network;
 
+import Client.data.FileSize;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.Format;
@@ -42,14 +47,26 @@ public class Server {
 
         running = true;
 
-        try {
-            while (running) {
-                new Handler(serverSocket.accept()).start();
+//        try {
+//            while (running) {
+//                new Handler(serverSocket.accept()).start();
+//            }
+//
+//        } finally {
+//            stop();
+//        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (running) {
+                    try {
+                        new Handler(serverSocket.accept()).start();
+                    } catch (IOException ex) {
+                        Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
             }
-
-        } finally {
-            stop();
-        }
+        }).start();
     }
 
     public void stop() throws Exception {
@@ -108,9 +125,9 @@ public class Server {
         }
 
         public void generateXml() {
-            //TODO generate XML
+            //TODO generate XML; funktioniert
             //and return it with out.println(...)
-            System.out.println("generate XML");
+            System.out.println("Generate XML");
 
             Element rootElem = new Element("RootDirectory");
             Document doc = new Document(rootElem);
@@ -118,16 +135,24 @@ public class Server {
             for (File elem : root.listFiles()) {
                 if (!elem.isDirectory()) {
                     Element file = new Element("File");
-//                Attribute size = new Attribute("size= ", "" + <size>);
-//                file.setAttribute(size);
+
+                    //mit calcFileSize die größe der Datei berechnen lassen
+                    double size = FileSize.calcFileSize(elem);
+
+                    Attribute sizeAtt = new Attribute("size", " = " + size);
+                    file.setAttribute(sizeAtt);
                     file.setText(elem.getName());
                     rootElem.addContent(file);
                 }
             }
-
             XMLOutputter xmlOutput = new XMLOutputter();
             xmlOutput.setFormat(Format.getPrettyFormat());
-            out.println(xmlOutput); //zurückgeben an client
+            try {
+                xmlOutput.output(doc, out);
+                // out.println(xmlOutput); //zurückgeben an client
+            } catch (IOException ex) {
+                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
     }

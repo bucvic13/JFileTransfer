@@ -8,7 +8,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
-
 /**
  * ServerGUI
  *
@@ -166,7 +165,7 @@ public class ServerGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_onStartServer
 
     private void onChooseRootFile(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onChooseRootFile
-            try {
+        try {
             JFileChooser chooser = new JFileChooser(pfad);
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             int ans = chooser.showOpenDialog(null);
@@ -223,6 +222,5 @@ public class ServerGUI extends javax.swing.JFrame {
         btRootDirectory.setBackground(col);
 
     }
-    
-   
+
 }

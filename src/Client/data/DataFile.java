@@ -7,9 +7,9 @@ package Client.data;
 public class DataFile {
  
     private final String name;
-    private final String size;
+    private final double size;
 
-    public DataFile(String name, String size) {
+    public DataFile(String name, double size) {
         this.name = name;
         this.size = size;
     }
@@ -18,13 +18,13 @@ public class DataFile {
         return name;
     }
 
-    public String getSize() {
+    public double getSize() {
         return size;
     }
 
     @Override
     public String toString() {
-        return name + "(" + size + ") ";
+        return String.format("%s ( %10.2f)", name, size);
     }
     
     
