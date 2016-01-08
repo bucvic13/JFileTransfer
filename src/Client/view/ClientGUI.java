@@ -6,6 +6,7 @@ import Client.model.ClientModel;
 import Client.network.Client;
 import java.awt.Color;
 import java.io.File;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
@@ -32,7 +33,7 @@ public class ClientGUI extends javax.swing.JFrame {
         tbServer.setModel(modelServer);
 
         //only for testing
-       // addTestData();
+        // addTestData();
     }
 
     public void addTestData() {
@@ -73,15 +74,18 @@ public class ClientGUI extends javax.swing.JFrame {
         tbServer = new javax.swing.JTable();
         spLocal = new javax.swing.JScrollPane();
         tbLocal = new javax.swing.JTable();
-        jPanel2 = new javax.swing.JPanel();
+        pnView = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList();
         jPanel4 = new javax.swing.JPanel();
-        lbServer = new javax.swing.JLabel();
-        lbLocalPath = new javax.swing.JLabel();
+        pnLocal = new javax.swing.JPanel();
         lbLocal = new javax.swing.JLabel();
-        lbServerPath = new javax.swing.JLabel();
+        tfShowLocalPath = new javax.swing.JTextField();
+        btChangeLocalPath = new javax.swing.JButton();
+        pnServer = new javax.swing.JPanel();
+        lbServer = new javax.swing.JLabel();
+        tfShowServerPath = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Client");
@@ -250,28 +254,44 @@ public class ClientGUI extends javax.swing.JFrame {
 
         pnData.add(jSplitPane1, java.awt.BorderLayout.SOUTH);
 
-        jPanel2.setLayout(new java.awt.BorderLayout());
+        pnView.setLayout(new java.awt.BorderLayout());
 
         jPanel1.setLayout(new java.awt.BorderLayout());
-        jPanel2.add(jPanel1, java.awt.BorderLayout.PAGE_START);
+        pnView.add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
         jScrollPane3.setViewportView(jList1);
 
-        jPanel2.add(jScrollPane3, java.awt.BorderLayout.CENTER);
+        pnView.add(jScrollPane3, java.awt.BorderLayout.CENTER);
 
         jPanel4.setLayout(new java.awt.GridLayout(1, 4));
 
-        lbServer.setText("Local");
-        jPanel4.add(lbServer);
-        jPanel4.add(lbLocalPath);
+        pnLocal.setLayout(new java.awt.GridLayout(1, 3));
 
-        lbLocal.setText("Server");
-        jPanel4.add(lbLocal);
-        jPanel4.add(lbServerPath);
+        lbLocal.setText("Local");
+        pnLocal.add(lbLocal);
+        pnLocal.add(tfShowLocalPath);
 
-        jPanel2.add(jPanel4, java.awt.BorderLayout.PAGE_END);
+        btChangeLocalPath.setText("...");
+        btChangeLocalPath.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onChangeLocalPath(evt);
+            }
+        });
+        pnLocal.add(btChangeLocalPath);
 
-        pnData.add(jPanel2, java.awt.BorderLayout.NORTH);
+        jPanel4.add(pnLocal);
+
+        pnServer.setLayout(new java.awt.GridLayout(1, 2));
+
+        lbServer.setText("Server");
+        pnServer.add(lbServer);
+        pnServer.add(tfShowServerPath);
+
+        jPanel4.add(pnServer);
+
+        pnView.add(jPanel4, java.awt.BorderLayout.PAGE_END);
+
+        pnData.add(pnView, java.awt.BorderLayout.NORTH);
 
         getContentPane().add(pnData, java.awt.BorderLayout.CENTER);
 
@@ -379,6 +399,27 @@ public class ClientGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_tbServerMouseClicked
 
+    private void onChangeLocalPath(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onChangeLocalPath
+
+        try {
+            JFileChooser chooser = new JFileChooser("");
+            chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            int ans = chooser.showOpenDialog(null);
+            if (ans == JFileChooser.APPROVE_OPTION) {
+                try {
+                    File f = chooser.getSelectedFile();
+                    tfShowLocalPath.setText("" + f.getAbsoluteFile());
+                    modelLocal.getLocalDatas(f);
+
+                } catch (Exception ex) {
+                    throw new Exception("Error while opening..." + ex.toString());
+                }
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+    }//GEN-LAST:event_onChangeLocalPath
+
     private void initGuiElements() {
         Color col = new Color(240, 240, 240);
         btClientToServer.setBackground(col);
@@ -386,6 +427,10 @@ public class ClientGUI extends javax.swing.JFrame {
         btStop.setBackground(col);
         btServerManager.setBackground(col);
 
+        //oder vielleicht lieber doch nicht ? Notiz an mich selbst xD
+        tfShowLocalPath.setEditable(true);
+        tfShowServerPath.setEditable(false);
+        
         btStart.setEnabled(true);
         btStop.setEnabled(false);
         btServerManager.setEnabled(true);
@@ -393,11 +438,10 @@ public class ClientGUI extends javax.swing.JFrame {
         btServerToClient.setEnabled(false);//nur enabled when datei ausgewählt ist (auf der server tabelle)
     }
 
-    public void setPath(File local, File server) {
-        lbLocalPath.setText("" + local);
-        lbServerPath.setText("" + server);
+    public void setPath(String server) {
+        tfShowServerPath.setText(server);
     }
-    
+
     public static void main(String args[]) {
         //Use Windows Look&Feel
         try {
@@ -413,6 +457,7 @@ public class ClientGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btChangeLocalPath;
     private javax.swing.JButton btClientToServer;
     private javax.swing.JButton btServerManager;
     private javax.swing.JButton btServerToClient;
@@ -420,25 +465,27 @@ public class ClientGUI extends javax.swing.JFrame {
     private javax.swing.JButton btStop;
     private javax.swing.JList jList1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JLabel lbClient;
     private javax.swing.JLabel lbIP;
     private javax.swing.JLabel lbLocal;
-    private javax.swing.JLabel lbLocalPath;
     private javax.swing.JLabel lbPort;
     private javax.swing.JLabel lbServer;
-    private javax.swing.JLabel lbServerPath;
     private javax.swing.JPanel pnData;
+    private javax.swing.JPanel pnLocal;
     private javax.swing.JPanel pnOptions;
+    private javax.swing.JPanel pnServer;
+    private javax.swing.JPanel pnView;
     private javax.swing.JScrollPane spLocal;
     private javax.swing.JScrollPane spServer;
     private javax.swing.JTable tbLocal;
     private javax.swing.JTable tbServer;
     private javax.swing.JTextField tfIP;
     private javax.swing.JTextField tfPort;
+    private javax.swing.JTextField tfShowLocalPath;
+    private javax.swing.JTextField tfShowServerPath;
     // End of variables declaration//GEN-END:variables
 
 }

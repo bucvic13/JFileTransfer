@@ -1,5 +1,6 @@
 package Server.view;
 
+import Client.view.ClientGUI;
 import Server.network.Server;
 import java.awt.Color;
 import java.io.File;
@@ -113,7 +114,7 @@ public class ServerGUI extends javax.swing.JFrame {
         pnInsertData.add(lbRootDirectory, gridBagConstraints);
 
         tfRootDirectory.setColumns(10);
-        tfRootDirectory.setText("C:\\Users\\User\\OneDrive\\3CHIF\\Deutsch");
+        tfRootDirectory.setText("D:\\Benutzer\\User\\Dokumente\\TestOrdner\\server");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -121,7 +122,7 @@ public class ServerGUI extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnInsertData.add(tfRootDirectory, gridBagConstraints);
 
-        btRootDirectory.setText("...");
+        btRootDirectory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Server/src/mode.png"))); // NOI18N
         btRootDirectory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 onChooseRootFile(evt);
@@ -150,6 +151,8 @@ public class ServerGUI extends javax.swing.JFrame {
             if (server != null && server.isRunning()) {
                 server.stop();
                 btStartServer.setText("Start Server");
+                     
+               
             } else {
 
                 server = new Server(Integer.parseInt(tfPort.getText()),
@@ -157,6 +160,11 @@ public class ServerGUI extends javax.swing.JFrame {
                 server.start();
 
                 btStartServer.setText("Stop Server");
+                
+                 //For opening the Client GUI and to deliver the path
+                    ClientGUI clientGUI = new ClientGUI();
+                    //clientGUI.setPath(root);
+                    clientGUI.setVisible(true);
             }
 
         } catch (Exception ex) {
@@ -166,7 +174,7 @@ public class ServerGUI extends javax.swing.JFrame {
 
     private void onChooseRootFile(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onChooseRootFile
         try {
-            JFileChooser chooser = new JFileChooser(pfad);
+            JFileChooser chooser = new JFileChooser("");
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             int ans = chooser.showOpenDialog(null);
             if (ans == JFileChooser.APPROVE_OPTION) {

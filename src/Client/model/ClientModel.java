@@ -1,16 +1,21 @@
 package Client.model;
 
+import Client.bl.CalculateFileSize;
 import Client.data.DataFile;
 import Client.data.DataFileEnum;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
+import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 /**
  *
@@ -29,7 +34,6 @@ public class ClientModel extends AbstractTableModel {
     }
 
     public void parseResponse(String response) throws JDOMException, IOException {
-        //TODO parse response xml
         SAXBuilder builder = new SAXBuilder();
         Document doc = (Document) builder.build(new ByteArrayInputStream(response.getBytes()));
 
@@ -43,11 +47,25 @@ public class ClientModel extends AbstractTableModel {
             System.out.println("File-Name: " + node.getText());
             System.out.println("File-Size: " + size);
             dataFiles.add(new DataFile(node.getText(), size));
-
         }
         super.fireTableDataChanged();
     }
 
+    public void getLocalDatas(File root)
+    {
+         for (File elem : root.listFiles()) {
+                if (!elem.isDirectory()) {
+
+                    String name = elem.getName();
+                    double size = CalculateFileSize.calcFileSize(elem);
+                    dataFiles.add(new DataFile(name, size));
+                }
+            }
+         
+         super.fireTableDataChanged();
+    }
+    
+    
     @Override
     public int getRowCount() {
 
