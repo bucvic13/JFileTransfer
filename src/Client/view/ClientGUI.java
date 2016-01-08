@@ -115,6 +115,7 @@ public class ClientGUI extends javax.swing.JFrame {
         pnOptions.add(lbPort, gridBagConstraints);
 
         tfIP.setColumns(10);
+        tfIP.setText("127.0.0.1");
         tfIP.setToolTipText("");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
@@ -124,6 +125,7 @@ public class ClientGUI extends javax.swing.JFrame {
         pnOptions.add(tfIP, gridBagConstraints);
 
         tfPort.setColumns(10);
+        tfPort.setText("8320");
         tfPort.setToolTipText("");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
