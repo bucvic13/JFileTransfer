@@ -30,7 +30,6 @@ public class ClientModel extends AbstractTableModel {
 
     public void parseResponse(String response) throws JDOMException, IOException {
         //TODO parse response xml
-
         SAXBuilder builder = new SAXBuilder();
         Document doc = (Document) builder.build(new ByteArrayInputStream(response.getBytes()));
 
@@ -39,7 +38,7 @@ public class ClientModel extends AbstractTableModel {
 
         for (int i = 0; i < list.size(); i++) {
             Element node = (Element) list.get(i);
-            double size = Double.parseDouble(node.getChildText("size"));
+            double size = Double.parseDouble(node.getAttributeValue("size"));
 
             System.out.println("File-Name: " + node.getText());
             System.out.println("File-Size: " + size);
@@ -83,7 +82,7 @@ public class ClientModel extends AbstractTableModel {
             case NAME:
                 return data.getName();
             case SIZE:
-                return data.getSize();
+                return String.format("%10.2f KB", data.getSize());
             default:
                 return "???";
         }

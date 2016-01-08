@@ -139,20 +139,19 @@ public class Server {
                     //mit calcFileSize die größe der Datei berechnen lassen
                     double size = CalculateFileSize.calcFileSize(elem);
 
-                    Attribute sizeAtt = new Attribute("size", " = " + size);
+                    Attribute sizeAtt = new Attribute("size", "" + size);
                     file.setAttribute(sizeAtt);
                     file.setText(elem.getName());
                     rootElem.addContent(file);
                 }
             }
             XMLOutputter xmlOutput = new XMLOutputter();
-            xmlOutput.setFormat(Format.getPrettyFormat());
-            try {
-                xmlOutput.output(doc, out);
-                // out.println(xmlOutput); //zurückgeben an client
-            } catch (IOException ex) {
-                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            xmlOutput.setFormat(Format.getCompactFormat());
+
+            String output = xmlOutput.outputString(doc);
+            output = output.replace("\n", "").replace("\r", "");
+
+            out.println(output);
         }
 
     }

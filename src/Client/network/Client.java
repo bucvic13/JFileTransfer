@@ -61,15 +61,6 @@ public class Client {
             String response = "";
             try {
                 
-//                Schleife damit alle Zeilen eingelesen werden?
-//                StringBuilder sb = new StringBuilder();
-//                while((in.readLine()) != null)
-//                {
-//                     sb.append(in.readLine()); 
-//                }
-//                response = sb.toString();
-                
-                
                 response = in.readLine();
                 
                 if(response == null || response.equals("")){
