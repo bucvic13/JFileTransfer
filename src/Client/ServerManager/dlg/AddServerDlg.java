@@ -4,8 +4,12 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 /**
+ * AddServerDlg
  *
+ * Dilaog GUI, for the input of the Server Information
+ * 
  * @author Viktoria Buchegger
+ * @version 1.0.0
  */
 public class AddServerDlg extends javax.swing.JDialog {
 
@@ -29,6 +33,9 @@ public class AddServerDlg extends javax.swing.JDialog {
         tfPort = new javax.swing.JTextField();
         btAccept = new javax.swing.JButton();
         btCancel = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        miExit = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Add Server");
@@ -58,10 +65,25 @@ public class AddServerDlg extends javax.swing.JDialog {
         });
         getContentPane().add(btCancel);
 
+        jMenu1.setText("File");
+
+        miExit.setText("Exit");
+        miExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onExit(evt);
+            }
+        });
+        jMenu1.add(miExit);
+
+        jMenuBar1.add(jMenu1);
+
+        setJMenuBar(jMenuBar1);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void onAccept(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onAccept
+        //This button, will set the ip and the port and closes the dialog
         try {
 
             if (tfIp.getText().isEmpty() || tfPort.getText().isEmpty()) {
@@ -81,9 +103,15 @@ public class AddServerDlg extends javax.swing.JDialog {
     }//GEN-LAST:event_onAccept
 
     private void onCanel(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onCanel
+        //Closes the dialog, without safing the input
         this.ok = false;
         this.dispose();
     }//GEN-LAST:event_onCanel
+
+    private void onExit(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onExit
+        //closes the frame
+        System.exit(0);
+    }//GEN-LAST:event_onExit
 
     public String getIp() {
         return ip;
@@ -124,6 +152,9 @@ public class AddServerDlg extends javax.swing.JDialog {
     private javax.swing.JButton btCancel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem miExit;
     private javax.swing.JTextField tfIp;
     private javax.swing.JTextField tfPort;
     // End of variables declaration//GEN-END:variables

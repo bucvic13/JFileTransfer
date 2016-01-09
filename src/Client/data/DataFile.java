@@ -1,8 +1,12 @@
 package Client.data;
 
 /**
+ * DataFile
  *
+ * Dataclass for the ClientModel
+ * 
  * @author Viktoria Buchegger
+ * @version 1.0.0
  */
 public class DataFile {
  

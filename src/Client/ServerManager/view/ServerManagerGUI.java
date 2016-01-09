@@ -3,24 +3,23 @@ package Client.ServerManager.view;
 import Client.ServerManager.data.ServerInformation;
 import Client.ServerManager.model.ServerManagerModel;
 import Client.ServerManager.dlg.AddServerDlg;
+import Client.view.ClientGUI;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.UIManager;
 
 /**
+ * ServerManagerGUI
  *
  * @author Viktoria Buchegger
+ * @version 1.0.0
  */
 public class ServerManagerGUI extends javax.swing.JFrame {
 
     private ServerManagerModel model;
-    private boolean ok = false;
-    private String ip;
-    private int port;
 
     public ServerManagerGUI() {
         try {
@@ -171,13 +170,14 @@ public class ServerManagerGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void onAdd(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onAdd
+        //this adds a new ServerInformation to the list
         try {
 
+            //Opens the dialog for the input
             AddServerDlg dialog = new AddServerDlg(this, true);
             dialog.setVisible(true);
 
             if (dialog.isOk()) {
-
                 ServerInformation data = new ServerInformation(dialog.getIp(), dialog.getPort());
                 model.add(data);
             }
@@ -188,10 +188,12 @@ public class ServerManagerGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_onAdd
 
     private void onRemove(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onRemove
+        //for removing an existing data
         try {
 
             int index = tbSafedServer.getSelectedRow();
 
+            //only removes it, when the user confirms on a JOptionPane
             int ans = JOptionPane.showConfirmDialog(this, "Do you want to remove this element");
             if (ans == JOptionPane.YES_OPTION) {
                 model.remove(index);
@@ -203,20 +205,24 @@ public class ServerManagerGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_onRemove
 
     private void onSelect(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onSelect
+        //here you cann select the data you want to have in your ClientGUI
         try {
 
             int index = tbSafedServer.getSelectedRow();
 
             if (index < 0) {
-                throw new Exception("you have to choose an Element");
+                throw new Exception("You have to choose an Element");
             }
 
             ServerInformation data = model.get(index);
-            ip = data.getIp();
-            port = data.getPort();
+            String ip = data.getIp();
+            int port = data.getPort();
             System.out.println("onSelect: " + data.toString());
 
-            this.ok = true;
+            ClientGUI clientFrame = new ClientGUI();
+            clientFrame.setData(ip, port);
+            
+            //closes this frame
             this.dispose();
 
         } catch (Exception e) {
@@ -229,6 +235,7 @@ public class ServerManagerGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_onLoad
 
     private void onSafeData(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onSafeData
+        //The user can choose a file for saving all the elemts of the table
         JFileChooser chooser = new JFileChooser("");
         int ret = chooser.showSaveDialog(null);
         if (ret == JFileChooser.APPROVE_OPTION) {
@@ -242,16 +249,16 @@ public class ServerManagerGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_onSafeData
 
     private void onExit(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onExit
+        //closes the frame
         System.exit(0);
     }//GEN-LAST:event_onExit
 
     private void onCancel(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onCancel
-
-        this.ok = false;
+        //closes the frame
         this.dispose();
-
     }//GEN-LAST:event_onCancel
     private void onLoadFile(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onLoadFile
+        //the user can choose a file, from where the table gets the data
         JFileChooser chooser = new JFileChooser("");
         int ret = chooser.showOpenDialog(null);
         if (ret == JFileChooser.APPROVE_OPTION) {
@@ -262,18 +269,6 @@ public class ServerManagerGUI extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_onLoadFile
-
-    public boolean isOk() {
-        return ok;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public int getPort() {
-        return port;
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAdd;

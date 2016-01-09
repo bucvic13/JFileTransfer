@@ -34,7 +34,7 @@ public class ClientGUI extends javax.swing.JFrame {
         tbServer.setModel(modelServer);
 
         //only for testing
-        // addTestData();
+        //addTestData();
     }
 
     public void addTestData() {
@@ -42,11 +42,13 @@ public class ClientGUI extends javax.swing.JFrame {
         modelServer.addTestdaten();
     }
 
-    private void sampleCommandTest() throws Exception {
+    private void sampleCommandTest(String cmd) throws Exception {
+        //controlls if there is a connection
         if (client.isListening()) {
-            String response = client.sendCommand("tree");
+            String response = client.sendCommand(cmd);
             System.out.println("got response: " + response);
-            //TODO parse response and load model with data
+
+            //calls the method parseResponse() to get out the datafiles from the XML
             modelServer.parseResponse(response);
         } else {
             System.out.println("not listening");
@@ -87,6 +89,9 @@ public class ClientGUI extends javax.swing.JFrame {
         pnServer = new javax.swing.JPanel();
         lbServer = new javax.swing.JLabel();
         tfShowServerPath = new javax.swing.JTextField();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        miExit = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Client");
@@ -296,11 +301,25 @@ public class ClientGUI extends javax.swing.JFrame {
 
         getContentPane().add(pnData, java.awt.BorderLayout.CENTER);
 
+        jMenu1.setText("File");
+
+        miExit.setText("Exit");
+        miExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onExit(evt);
+            }
+        });
+        jMenu1.add(miExit);
+
+        jMenuBar1.add(jMenu1);
+
+        setJMenuBar(jMenuBar1);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void onClientToServer(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onClientToServer
-        //Datei auswählen (Lokal) die man zum server kopieren will
+        //Select file (local) that shall be copied to the Server
         try {
             if (data == null) {
                 throw new Exception("Please chose a File from Local");
@@ -309,40 +328,50 @@ public class ClientGUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, data + "will be copied to the Server");
 
         } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }//GEN-LAST:event_onClientToServer
 
     private void onServerToClient(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onServerToClient
-        //Datei auswählen (Server) die man zum client kopieren will
+        //Select file (server) that shall be copied to the Client
         try {
             if (data == null) {
                 throw new Exception("Please chose a File from Server");
             }
-            if(tfShowLocalPath.getText().isEmpty())
-            {
+            if (tfShowLocalPath.getText().isEmpty()) {
                 throw new Exception("You have to chose a Local File");
             }
-            
-            JOptionPane.showMessageDialog(this, data + "will be copied to the Client");
-             Server server = new Server(Integer.parseInt(tfPort.getText()),
-                        new File(tfShowLocalPath.getText()));
-            String response = client.sendCommand("get");
-            System.out.println("got response (ServerToClient): " + response);
-            
-            
 
+            System.out.println("Path: " + tfShowLocalPath.getText());
+
+            JOptionPane.showMessageDialog(this, data + "will be copied to the Client");
+
+            if (client.isListening()) {
+                String response = client.sendCommand("get");
+                System.out.println("got response: " + response);
+            } else {
+                System.out.println("not listening");
+            }
+
+//            Server server = new Server(Integer.parseInt(tfPort.getText()),
+//                    new File(tfShowLocalPath.getText()));
+//            String response = client.sendCommand("get");
+//            System.out.println("got response (ServerToClient): " + response);
         } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }//GEN-LAST:event_onServerToClient
 
     private void onStop(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onStop
-        //Verbindung zum Server unterbrechen
+        //Interrupt connection to the server
         try {
+
+            //only if the server is running
             if (client.isListening()) {
                 client.disconnect();
                 btStart.setEnabled(true);
                 btStop.setEnabled(false);
-
+                btServerManager.setEnabled(true);
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
@@ -350,63 +379,64 @@ public class ClientGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_onStop
 
     private void onServerManager(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onServerManager
-        //Startet ServerManager GUI
+        //Opens ServerManager GUI
         try {
 
             //this.setVisible(false);
             ServerManagerGUI managerGUI = new ServerManagerGUI();
             managerGUI.setVisible(true);
 
-            if (managerGUI.isOk()) {
-                tfIP.setText(managerGUI.getIp());
-                tfPort.setText("" + managerGUI.getIp());
-            }
-
         } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }//GEN-LAST:event_onServerManager
 
     private void onStart(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onStart
-
+        //connects the Client with the Server
         try {
 
             if ((tfIP.getText()).isEmpty() || (tfPort.getText()).isEmpty()) {
                 throw new Exception("You have to fill in all fields");
             }
 
+            //calls the Client and passes the information
             client = new Client(tfIP.getText(), Integer.parseInt(tfPort.getText()));
             client.connect();
+
             btStart.setEnabled(false);
             btStop.setEnabled(true);
+            btServerManager.setEnabled(false);
 
-            //Test only
-            sampleCommandTest();
+            //Test onlys
+            sampleCommandTest("tree");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }//GEN-LAST:event_onStart
 
     private void tbLocalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbLocalMouseClicked
+        //clickEvent of ClientTable: only to select one file
         try {
-
             btClientToServer.setEnabled(true);
             btServerToClient.setEnabled(false);
             int index = tbLocal.getSelectedRow();
-            data = modelLocal.getElement(index);
+            data = modelLocal.get(index);
 
         } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }//GEN-LAST:event_tbLocalMouseClicked
 
     private void tbServerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbServerMouseClicked
         try {
-
+            //clickEvent of ServerTable: only to select one file
             btServerToClient.setEnabled(true);
             btClientToServer.setEnabled(false);
             int index = tbServer.getSelectedRow();
-            data = modelServer.getElement(index);
+            data = modelServer.get(index);
 
         } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }//GEN-LAST:event_tbServerMouseClicked
 
@@ -431,6 +461,12 @@ public class ClientGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_onChangeLocalPath
 
+    private void onExit(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onExit
+        //closes the frame
+        System.exit(0);
+    }//GEN-LAST:event_onExit
+
+    //initializes elements of the gui
     private void initGuiElements() {
         Color col = new Color(240, 240, 240);
         btClientToServer.setBackground(col);
@@ -438,19 +474,29 @@ public class ClientGUI extends javax.swing.JFrame {
         btStop.setBackground(col);
         btServerManager.setBackground(col);
 
-        //oder vielleicht lieber doch nicht ? Notiz an mich selbst xD
+        //oder vielleicht lieber doch nicht ? Notiz an mich selbst
         tfShowLocalPath.setEditable(true);
         tfShowServerPath.setEditable(false);
-        
+
         btStart.setEnabled(true);
         btStop.setEnabled(false);
         btServerManager.setEnabled(true);
-        btClientToServer.setEnabled(false); //nur enabled wenn datei ausgewählt (auf der lokalen tabelle)
-        btServerToClient.setEnabled(false);//nur enabled when datei ausgewählt ist (auf der server tabelle)
+        btClientToServer.setEnabled(false); //only enabled when a datafile is selected (at the local table)
+        btServerToClient.setEnabled(false);//only enabled when a datafile is selected (at the server table)
     }
 
+    //gets the Path from the ServerGUI
     public void setPath(String server) {
         tfShowServerPath.setText(server);
+    }
+
+    public void setData(String ip, int port) {
+        System.err.println("setData: " + ip + " " + port);
+
+        tfIP.setText("");
+        tfPort.setText("");
+        tfIP.setText(ip);
+        tfPort.setText("" + port);
     }
 
     public static void main(String args[]) {
@@ -475,6 +521,8 @@ public class ClientGUI extends javax.swing.JFrame {
     private javax.swing.JButton btStart;
     private javax.swing.JButton btStop;
     private javax.swing.JList jList1;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane3;
@@ -484,6 +532,7 @@ public class ClientGUI extends javax.swing.JFrame {
     private javax.swing.JLabel lbLocal;
     private javax.swing.JLabel lbPort;
     private javax.swing.JLabel lbServer;
+    private javax.swing.JMenuItem miExit;
     private javax.swing.JPanel pnData;
     private javax.swing.JPanel pnLocal;
     private javax.swing.JPanel pnOptions;

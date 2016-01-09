@@ -3,9 +3,15 @@ package Client.ServerManager.data;
 import java.io.Serializable;
 
 /**
+ * ServerInformation
  *
+ * Dataclass for the ServerInformation
+ * 
  * @author Viktoria Buchegger
+ * @version 1.0.0
  */
+
+
 public class ServerInformation implements Serializable {
 
     private final String ip;

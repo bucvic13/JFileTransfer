@@ -2,7 +2,6 @@ package Client.ServerManager.model;
 
 import Client.ServerManager.data.ServerInformation;
 import Client.ServerManager.data.ServerManagerEnum;
-import Client.data.DataFileEnum;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,21 +9,25 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 /**
+ * ServerManagerModel
  *
+ * Modelclass for the ServerManager
+ * 
  * @author Viktoria Buchegger
+ * @version 1.0.0
  */
 public class ServerManagerModel extends AbstractTableModel {
 
     private List<ServerInformation> servers = new LinkedList<>();
 
     public ServerManagerModel() throws Exception {
-        // addTestdatas();  only for testing
+        //only for testing 
+        addTestdatas();  
     }
 
     private void addTestdatas() throws Exception {
@@ -34,7 +37,6 @@ public class ServerManagerModel extends AbstractTableModel {
     }
 
     public void add(ServerInformation data) throws Exception {
-
         checkIfDataAlreadyExists(data);
         servers.add(data);
         super.fireTableDataChanged();
@@ -57,7 +59,6 @@ public class ServerManagerModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-
         ServerManagerEnum e = ServerManagerEnum.values()[columnIndex];
         ServerInformation data = servers.get(rowIndex);
 
@@ -82,7 +83,6 @@ public class ServerManagerModel extends AbstractTableModel {
 
     @Override
     public String getColumnName(int column) {
-
         return ServerManagerEnum.values()[column].getName();
     }
 
@@ -101,9 +101,7 @@ public class ServerManagerModel extends AbstractTableModel {
     }
 
     @Override
-    public void setValueAt(Object o, int row, int col) {
-        try {
-
+    public void setValueAt(Object o, int row, int col) { 
             ServerInformation serverOld = servers.get(row);
             ServerManagerEnum e = ServerManagerEnum.values()[col];
 
@@ -126,12 +124,9 @@ public class ServerManagerModel extends AbstractTableModel {
 
             servers.set(index, newServer);
             super.fireTableDataChanged();
-
-        } catch (Exception e) {
-            throw e;
-        }
     }
 
+    //Saves all the data from the list in a file
     public void save(File file) throws IOException {
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
 
@@ -142,6 +137,7 @@ public class ServerManagerModel extends AbstractTableModel {
         oos.close();
     }
 
+    //Loads the data from a file and safes it in the list
     public void load(File file) throws FileNotFoundException, IOException, ClassNotFoundException, Exception {
         servers.clear();
 
@@ -160,6 +156,7 @@ public class ServerManagerModel extends AbstractTableModel {
         } while (s != null);
     }
 
+    //checks if the the Data is already in the list, if yes it return an Exception
     public void checkIfDataAlreadyExists(ServerInformation data) throws Exception {
         for (ServerInformation server : servers) {
             if (server.getIp().equals(data.getIp()) && server.getPort() == data.getPort()) {

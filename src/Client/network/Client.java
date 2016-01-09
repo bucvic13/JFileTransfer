@@ -13,16 +13,15 @@ import java.net.Socket;
  * @version 1.0.0
  */
 public class Client {
-    
+
     private final String ip;
     private final int port;
     private boolean listening;
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
-    
-    public Client(String ip, Integer port)
-    {
+
+    public Client(String ip, Integer port) {
         this.ip = ip;
         this.port = port;
         this.listening = false;
@@ -30,43 +29,48 @@ public class Client {
         this.in = null;
         this.out = null;
     }
-    
-    public void connect() throws IOException
-    {
+
+    public void connect() throws IOException {
+        //creates a new Socket with the parametes: ip and port
         socket = new Socket(ip, port);
+
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
         System.out.println("Connected");
+        
+        //sets listening true: client is connected with the server
         listening = true;
     }
-    
-    public void disconnect() throws IOException
-    {
-        if(socket != null)
-        {
+
+    //interrupts the conection
+    public void disconnect() throws IOException {
+        if (socket != null) {
             socket.close();
         }
-        
+
         socket = null;
         in = null;
         out = null;
         listening = false;
     }
-    
-    public  String sendCommand(String cmd) throws Exception
-    {
-        if(socket != null && in !=  null && out != null)
-        {
+
+    public String sendCommand(String cmd) throws Exception {
+        
+        //checks, if everything is working right
+        if (socket != null && in != null && out != null) {
+            //parses the command to the Server
             out.println(cmd);
             String response = "";
             try {
-                
+
+                //gets the response from the Server, but only the first line
                 response = in.readLine();
-                
-                if(response == null || response.equals("")){
+
+                //if there is no response, it cancels
+                if (response == null || response.equals("")) {
                     return "";
                 }
-            }  catch(IOException ex) {
+            } catch (IOException ex) {
                 response = "Error: " + ex.getMessage();
             }
             return response;

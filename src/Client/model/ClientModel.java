@@ -9,86 +9,101 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
-import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
-import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
 
 /**
+ * ClientModel
  *
  * @author Viktoria Buchegger
+ * @version 1.0.0
  */
 public class ClientModel extends AbstractTableModel {
 
     private List<DataFile> dataFiles = new LinkedList<>();
 
+    //only for testing
     public void addTestdaten() {
-        dataFiles.add(new DataFile("File1", 40));
-        dataFiles.add(new DataFile("File2", 50));
-        dataFiles.add(new DataFile("File3", 408));
-        dataFiles.add(new DataFile("File4", 790));
+        add(new DataFile("File1", 40));
+        add(new DataFile("File2", 50));
+        add(new DataFile("File3", 408));
+        add(new DataFile("File4", 790));
+    }
+
+    //adds an Element to the list
+    public void add(DataFile data) {
+        dataFiles.add(data);
         super.fireTableDataChanged();
     }
 
+    //return an Element from the list
+    public DataFile get(int rowIndex) {
+        DataFile data = dataFiles.get(rowIndex);
+        return data;
+    }
+
+    //gets the data from the xml and adds it to the list
     public void parseResponse(String response) throws JDOMException, IOException {
         SAXBuilder builder = new SAXBuilder();
         Document doc = (Document) builder.build(new ByteArrayInputStream(response.getBytes()));
 
+        //returns the RootElement: <RootDirectory>
         Element rootNode = doc.getRootElement();
+        
+        //adds all Children <File> from the RootElement to the list
         List list = rootNode.getChildren("File");
 
+        //runs through the list until the end of it
         for (int i = 0; i < list.size(); i++) {
+            
+            //gets the item from the list and parses it into an Element
             Element node = (Element) list.get(i);
+            
+            //returns the value of the Attribute size
             double size = Double.parseDouble(node.getAttributeValue("size"));
 
             System.out.println("File-Name: " + node.getText());
             System.out.println("File-Size: " + size);
-            dataFiles.add(new DataFile(node.getText(), size));
+            
+            //adds the element to the list
+            add(new DataFile(node.getText(), size));
         }
         super.fireTableDataChanged();
     }
 
-    public void getLocalDatas(File root)
-    {
-         for (File elem : root.listFiles()) {
-                if (!elem.isDirectory()) {
-
-                    String name = elem.getName();
-                    double size = CalculateFileSize.calcFileSize(elem);
-                    dataFiles.add(new DataFile(name, size));
-                }
+    //gets the data from the local path and adds it to the list
+    public void getLocalDatas(File root) {
+        
+        //continues until the last elem is added
+        for (File elem : root.listFiles()) {
+            if (!elem.isDirectory()) {
+                
+                //gets the Name of the file
+                String name = elem.getName();
+                
+                //calls the static Method calcFileSize() to calculate the size of the file
+                double size = CalculateFileSize.calcFileSize(elem);
+                add(new DataFile(name, size));
             }
-         
-         super.fireTableDataChanged();
+        }
+        super.fireTableDataChanged();
     }
-    
-    
+
     @Override
     public int getRowCount() {
-
         return dataFiles.size();
     }
 
     @Override
     public int getColumnCount() {
-
         return DataFileEnum.values().length;
     }
 
     @Override
     public String getColumnName(int column) {
-
         return DataFileEnum.values()[column].getName();
-    }
-
-    public DataFile getElement(int rowIndex) {
-
-        DataFile data = dataFiles.get(rowIndex);
-        return data;
-
     }
 
     @Override
@@ -106,9 +121,8 @@ public class ClientModel extends AbstractTableModel {
         }
     }
 
-    public void DateFromServerToClient(DataFile data, String localPath) {
-        
-        dataFiles.add(data);
+    public void addFromServerToClient(DataFile data) {
+        add(data);
         super.fireTableDataChanged();
     }
 

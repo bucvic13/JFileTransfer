@@ -3,8 +3,10 @@ package Client.bl;
 import java.io.File;
 
 /**
+ * CalculateFileSize
  *
  * @author Viktoria Buchegger
+ * @version 1.0.0
  */
 public class CalculateFileSize {
 

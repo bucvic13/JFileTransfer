@@ -44,6 +44,9 @@ public class ServerGUI extends javax.swing.JFrame {
         lbRootDirectory = new javax.swing.JLabel();
         tfRootDirectory = new javax.swing.JTextField();
         btRootDirectory = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        miExit = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sever");
@@ -137,34 +140,50 @@ public class ServerGUI extends javax.swing.JFrame {
 
         getContentPane().add(pnInsertData, java.awt.BorderLayout.CENTER);
 
+        jMenu1.setText("File");
+
+        miExit.setText("Exit");
+        miExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onExit(evt);
+            }
+        });
+        jMenu1.add(miExit);
+
+        jMenuBar1.add(jMenu1);
+
+        setJMenuBar(jMenuBar1);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void onStartServer(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onStartServer
         try {
+
+            //reads the rootDirectory from the textField
             String root = tfRootDirectory.getText();
 
             if (root.isEmpty()) {
                 throw new Exception("You have to choose a Root Directory");
             }
 
+            //stops the server, if it is already running
             if (server != null && server.isRunning()) {
                 server.stop();
                 btStartServer.setText("Start Server");
-                     
-               
+
             } else {
 
+                //creates a new server
                 server = new Server(Integer.parseInt(tfPort.getText()),
                         new File(root));
                 server.start();
-
                 btStartServer.setText("Stop Server");
-                
-                 //For opening the Client GUI and to deliver the path
-                    ClientGUI clientGUI = new ClientGUI();
-                    //clientGUI.setPath(root);
-                    clientGUI.setVisible(true);
+
+                //For opening the Client GUI and to deliver the Sever path
+                ClientGUI clientGUI = new ClientGUI();
+                clientGUI.setPath(root);
+                clientGUI.setVisible(true);
             }
 
         } catch (Exception ex) {
@@ -173,8 +192,10 @@ public class ServerGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_onStartServer
 
     private void onChooseRootFile(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onChooseRootFile
+        //select the rootFile
         try {
             JFileChooser chooser = new JFileChooser("");
+            //only directories will be displayed 
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             int ans = chooser.showOpenDialog(null);
             if (ans == JFileChooser.APPROVE_OPTION) {
@@ -190,6 +211,11 @@ public class ServerGUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_onChooseRootFile
+
+    private void onExit(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onExit
+        //closes the window
+        System.exit(0);
+    }//GEN-LAST:event_onExit
     public static void main(String args[]) {
         //Use Windows Look&Feel
         try {
@@ -207,9 +233,12 @@ public class ServerGUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btRootDirectory;
     private javax.swing.JButton btStartServer;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JLabel lbIP;
     private javax.swing.JLabel lbPort;
     private javax.swing.JLabel lbRootDirectory;
+    private javax.swing.JMenuItem miExit;
     private javax.swing.JPanel pnHeading;
     private javax.swing.JPanel pnInsertData;
     private javax.swing.JLabel pnServer;

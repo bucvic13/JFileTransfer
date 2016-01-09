@@ -10,7 +10,6 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.logging.Level;
@@ -40,29 +39,26 @@ public class Server {
         this.running = false;
     }
 
+    //starts the server
     public void start() throws Exception {
+
+        //checks if the server is alread running
         if (running) {
             throw new Exception("Server is already running");
         }
 
+        //creates a new ServerSocket at the port xxx
         serverSocket = new ServerSocket(port);
         System.out.println("Server started at port: " + port);
 
         running = true;
 
-//        try {
-//            while (running) {
-//                new Handler(serverSocket.accept()).start();
-//            }
-//
-//        } finally {
-//            stop();
-//        }
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (running) {
                     try {
+                        //creates a new Handler 
                         new Handler(serverSocket.accept()).start();
                     } catch (IOException ex) {
                         Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
@@ -72,6 +68,7 @@ public class Server {
         }).start();
     }
 
+    //stops the server 
     public void stop() throws Exception {
         running = false;
         if (serverSocket != null) {
@@ -99,7 +96,11 @@ public class Server {
 
                 //wait for commands
                 while (running) {
+
+                    //reads the command from the Server
                     String command = in.readLine();
+
+                    //if there is no command, the server stops
                     if (command == null) {
                         break;
                     }
@@ -110,6 +111,7 @@ public class Server {
                                 generateXml();
                                 break;
                             case "get":
+                                System.out.println("run() get: " + root);
                                 readFile(root.toString());
                                 break;
                         }
@@ -123,6 +125,7 @@ public class Server {
                 System.err.println("Error: " + e);
             } finally {
                 try {
+                    //trys to close the socket
                     socket.close();
                 } catch (Exception e) {
                     System.err.println("Could not close socket");
@@ -131,42 +134,47 @@ public class Server {
             }
         }
 
+        //generates XML
         public void generateXml() {
-            //TODO generate XML; funktioniert
-            //and return it with out.println(...)
+            //Template of the XML:  <RootDirectory><File size="17">Datei.txt</File></RootDirectory>
             System.out.println("Generate XML");
 
+            //creates the RootElement <RootDirectory>
             Element rootElem = new Element("RootDirectory");
             Document doc = new Document(rootElem);
 
             for (File elem : root.listFiles()) {
                 if (!elem.isDirectory()) {
+                    //creates the Element <File>
                     Element file = new Element("File");
 
-                    //mit calcFileSize die größe der Datei berechnen lassen
+                    //with calcFileSize() the size of the file has to be calculated
                     double size = CalculateFileSize.calcFileSize(elem);
 
+                    //creates the Attribute size with the calulculatet size of the file
                     Attribute sizeAtt = new Attribute("size", "" + size);
                     file.setAttribute(sizeAtt);
                     file.setText(elem.getName());
+                    //adds the new file to the RootElement
                     rootElem.addContent(file);
                 }
             }
             XMLOutputter xmlOutput = new XMLOutputter();
             xmlOutput.setFormat(Format.getCompactFormat());
 
+            //parses the XMLOutputter into a String
             String output = xmlOutput.outputString(doc);
+            //puts the whole xml in one line, because only the first line will be readed in the Client 
             output = output.replace("\n", "").replace("\r", "");
 
+            //returns it with out.println(...)
             out.println(output);
         }
 
         private String readFile(String path) throws IOException {
-
             byte[] encoded = Files.readAllBytes(Paths.get(path));
             return new String(encoded, "UTF-8");
         }
-
     }
 
     public Integer getPort() {
