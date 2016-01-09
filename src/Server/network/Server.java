@@ -111,8 +111,8 @@ public class Server {
                                 generateXml();
                                 break;
                             case "get":
-                                System.out.println("run() get: " + root);
-                                readFile(root.toString());
+                                System.out.println("command get");
+                                readFile("");
                                 break;
                         }
 
@@ -171,7 +171,7 @@ public class Server {
             out.println(output);
         }
 
-        private String readFile(String path) throws IOException {
+        public String readFile(String path) throws IOException {
             byte[] encoded = Files.readAllBytes(Paths.get(path));
             return new String(encoded, "UTF-8");
         }

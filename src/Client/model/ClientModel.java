@@ -43,6 +43,12 @@ public class ClientModel extends AbstractTableModel {
         DataFile data = dataFiles.get(rowIndex);
         return data;
     }
+    
+    public void clearList()
+    {
+        dataFiles.clear();
+        super.fireTableDataChanged();
+    }
 
     //gets the data from the xml and adds it to the list
     public void parseResponse(String response) throws JDOMException, IOException {

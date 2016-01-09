@@ -78,7 +78,6 @@ public class ClientGUI extends javax.swing.JFrame {
         spLocal = new javax.swing.JScrollPane();
         tbLocal = new javax.swing.JTable();
         pnView = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList();
         jPanel4 = new javax.swing.JPanel();
@@ -262,9 +261,6 @@ public class ClientGUI extends javax.swing.JFrame {
 
         pnView.setLayout(new java.awt.BorderLayout());
 
-        jPanel1.setLayout(new java.awt.BorderLayout());
-        pnView.add(jPanel1, java.awt.BorderLayout.PAGE_START);
-
         jScrollPane3.setViewportView(jList1);
 
         pnView.add(jScrollPane3, java.awt.BorderLayout.CENTER);
@@ -275,6 +271,12 @@ public class ClientGUI extends javax.swing.JFrame {
 
         lbLocal.setText("Local");
         pnLocal.add(lbLocal);
+
+        tfShowLocalPath.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                onEnterLocalPath(evt);
+            }
+        });
         pnLocal.add(tfShowLocalPath);
 
         btChangeLocalPath.setText("...");
@@ -343,7 +345,6 @@ public class ClientGUI extends javax.swing.JFrame {
             }
 
             System.out.println("Path: " + tfShowLocalPath.getText());
-
             JOptionPane.showMessageDialog(this, data + "will be copied to the Client");
 
             if (client.isListening()) {
@@ -353,10 +354,6 @@ public class ClientGUI extends javax.swing.JFrame {
                 System.out.println("not listening");
             }
 
-//            Server server = new Server(Integer.parseInt(tfPort.getText()),
-//                    new File(tfShowLocalPath.getText()));
-//            String response = client.sendCommand("get");
-//            System.out.println("got response (ServerToClient): " + response);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
@@ -428,8 +425,8 @@ public class ClientGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_tbLocalMouseClicked
 
     private void tbServerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbServerMouseClicked
+        //clickEvent of ServerTable: only to select one file
         try {
-            //clickEvent of ServerTable: only to select one file
             btServerToClient.setEnabled(true);
             btClientToServer.setEnabled(false);
             int index = tbServer.getSelectedRow();
@@ -441,7 +438,7 @@ public class ClientGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_tbServerMouseClicked
 
     private void onChangeLocalPath(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onChangeLocalPath
-
+        //chose the local path with a FileChooser
         try {
             JFileChooser chooser = new JFileChooser("");
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -456,15 +453,32 @@ public class ClientGUI extends javax.swing.JFrame {
                     throw new Exception("Error while opening..." + ex.toString());
                 }
             }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }//GEN-LAST:event_onChangeLocalPath
-
     private void onExit(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onExit
         //closes the frame
         System.exit(0);
     }//GEN-LAST:event_onExit
+    private void onEnterLocalPath(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_onEnterLocalPath
+        //if you type in a LocalPath and press enter the files will the loaded
+        try {
+            //KeyCode for Enter = 10
+            if (evt.getKeyCode() == 10) {
+
+                if (tfShowLocalPath.getText().isEmpty()) {
+                    throw new Exception("You have to type in a Local File");
+                }
+                modelLocal.clearList();
+                File f = new File(tfShowLocalPath.getText());
+                modelLocal.getLocalDatas(f);
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_onEnterLocalPath
 
     //initializes elements of the gui
     private void initGuiElements() {
@@ -523,7 +537,6 @@ public class ClientGUI extends javax.swing.JFrame {
     private javax.swing.JList jList1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSplitPane jSplitPane1;
