@@ -77,10 +77,10 @@ public class ClientGUI extends javax.swing.JFrame {
         tbServer = new javax.swing.JTable();
         spLocal = new javax.swing.JScrollPane();
         tbLocal = new javax.swing.JTable();
-        pnView = new javax.swing.JPanel();
+        pnOutput = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
-        jPanel4 = new javax.swing.JPanel();
+        liOutput = new javax.swing.JList();
+        pnPath = new javax.swing.JPanel();
         pnLocal = new javax.swing.JPanel();
         lbLocal = new javax.swing.JLabel();
         tfShowLocalPath = new javax.swing.JTextField();
@@ -259,17 +259,19 @@ public class ClientGUI extends javax.swing.JFrame {
 
         pnData.add(jSplitPane1, java.awt.BorderLayout.SOUTH);
 
-        pnView.setLayout(new java.awt.BorderLayout());
+        pnOutput.setLayout(new java.awt.BorderLayout());
 
-        jScrollPane3.setViewportView(jList1);
+        jScrollPane3.setViewportView(liOutput);
 
-        pnView.add(jScrollPane3, java.awt.BorderLayout.CENTER);
+        pnOutput.add(jScrollPane3, java.awt.BorderLayout.CENTER);
 
-        jPanel4.setLayout(new java.awt.GridLayout(1, 4));
+        pnPath.setLayout(new java.awt.GridLayout(1, 4));
 
         pnLocal.setLayout(new java.awt.GridLayout(1, 3));
 
         lbLocal.setText("Local");
+        lbLocal.setMaximumSize(new java.awt.Dimension(10, 14));
+        lbLocal.setMinimumSize(new java.awt.Dimension(10, 14));
         pnLocal.add(lbLocal);
 
         tfShowLocalPath.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -287,7 +289,7 @@ public class ClientGUI extends javax.swing.JFrame {
         });
         pnLocal.add(btChangeLocalPath);
 
-        jPanel4.add(pnLocal);
+        pnPath.add(pnLocal);
 
         pnServer.setLayout(new java.awt.GridLayout(1, 2));
 
@@ -295,11 +297,11 @@ public class ClientGUI extends javax.swing.JFrame {
         pnServer.add(lbServer);
         pnServer.add(tfShowServerPath);
 
-        jPanel4.add(pnServer);
+        pnPath.add(pnServer);
 
-        pnView.add(jPanel4, java.awt.BorderLayout.PAGE_END);
+        pnOutput.add(pnPath, java.awt.BorderLayout.PAGE_END);
 
-        pnData.add(pnView, java.awt.BorderLayout.NORTH);
+        pnData.add(pnOutput, java.awt.BorderLayout.NORTH);
 
         getContentPane().add(pnData, java.awt.BorderLayout.CENTER);
 
@@ -534,10 +536,8 @@ public class ClientGUI extends javax.swing.JFrame {
     private javax.swing.JButton btServerToClient;
     private javax.swing.JButton btStart;
     private javax.swing.JButton btStop;
-    private javax.swing.JList jList1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JLabel lbClient;
@@ -545,12 +545,14 @@ public class ClientGUI extends javax.swing.JFrame {
     private javax.swing.JLabel lbLocal;
     private javax.swing.JLabel lbPort;
     private javax.swing.JLabel lbServer;
+    private javax.swing.JList liOutput;
     private javax.swing.JMenuItem miExit;
     private javax.swing.JPanel pnData;
     private javax.swing.JPanel pnLocal;
     private javax.swing.JPanel pnOptions;
+    private javax.swing.JPanel pnOutput;
+    private javax.swing.JPanel pnPath;
     private javax.swing.JPanel pnServer;
-    private javax.swing.JPanel pnView;
     private javax.swing.JScrollPane spLocal;
     private javax.swing.JScrollPane spServer;
     private javax.swing.JTable tbLocal;
