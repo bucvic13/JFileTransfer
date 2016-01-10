@@ -130,12 +130,7 @@ public class Server {
                                 base = base + System.getProperty("file.separator");
                                 //System.out.println("get base: " + base + parameter);
                                 String response = readFile(base + parameter);
-                                
-                                FileWriter fw = new FileWriter(base + parameter + ".parsed");
-                                fw.write(response);
-                                fw.flush();
-                                fw.close();
-                                
+
                                 out.println(response);
                                 out.println("end");
                                 break;
