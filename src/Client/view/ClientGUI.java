@@ -6,7 +6,9 @@ import Client.model.ClientModel;
 import Client.network.Client;
 import Server.network.Server;
 import java.awt.Color;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -18,30 +20,30 @@ import javax.swing.UIManager;
  * @version 1.0.0
  */
 public class ClientGUI extends javax.swing.JFrame {
-
+    
     private Client client;
     private ClientModel modelServer, modelLocal;
     private DataFile data;
-
+    
     public ClientGUI() {
         initComponents();
         initGuiElements();
-
+        
         modelLocal = new ClientModel();
         modelServer = new ClientModel();
-
+        
         tbLocal.setModel(modelLocal);
         tbServer.setModel(modelServer);
 
         //only for testing
         //addTestData();
     }
-
+    
     public void addTestData() {
         modelLocal.addTestdaten();
         modelServer.addTestdaten();
     }
-
+    
     private void sampleCommandTest(String cmd) throws Exception {
         //controlls if there is a connection
         if (client.isListening()) {
@@ -54,7 +56,7 @@ public class ClientGUI extends javax.swing.JFrame {
             System.out.println("not listening");
         }
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -328,9 +330,9 @@ public class ClientGUI extends javax.swing.JFrame {
             if (data == null) {
                 throw new Exception("Please chose a File from Local");
             }
-
+            
             JOptionPane.showMessageDialog(this, data + "will be copied to the Server");
-
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
@@ -345,20 +347,33 @@ public class ClientGUI extends javax.swing.JFrame {
             if (tfShowLocalPath.getText().isEmpty()) {
                 throw new Exception("You have to chose a Local File");
             }
-
+            
             System.out.println("Path: " + tfShowLocalPath.getText());
             JOptionPane.showMessageDialog(this, data + "will be copied to the Client");
-
+            
             if (client.isListening()) {
                 String response = client.sendLongCommand("get#" + data.getName());
-                System.err.println("got response: " + response);
+                //System.err.println("got response: " + response);
 
-                modelLocal.addFromServerToClient(data);
+                //modelLocal.addFromServerToClient(data);
+                String localPath = tfShowLocalPath.getText();
+                String newPath = localPath.endsWith("/") ? localPath : localPath + "/";
+                newPath += data.getName();
+                
+                System.out.println(newPath);
+                
+                BufferedWriter bw = new BufferedWriter(new FileWriter(newPath));
+                bw.write(response);
+                bw.flush();
+                bw.close();
 
+                //update local model
+                modelLocal.getLocalDatas(new File(localPath));
+                
             } else {
                 System.out.println("not listening");
             }
-
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
@@ -387,7 +402,7 @@ public class ClientGUI extends javax.swing.JFrame {
             //this.setVisible(false);
             ServerManagerGUI managerGUI = new ServerManagerGUI();
             managerGUI.setVisible(true);
-
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
@@ -396,7 +411,7 @@ public class ClientGUI extends javax.swing.JFrame {
     private void onStart(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onStart
         //connects the Client with the Server
         try {
-
+            
             if ((tfIP.getText()).isEmpty() || (tfPort.getText()).isEmpty()) {
                 throw new Exception("You have to fill in all fields");
             }
@@ -404,7 +419,7 @@ public class ClientGUI extends javax.swing.JFrame {
             //calls the Client and passes the information
             client = new Client(tfIP.getText(), Integer.parseInt(tfPort.getText()));
             client.connect();
-
+            
             btStart.setEnabled(false);
             btStop.setEnabled(true);
             btServerManager.setEnabled(false);
@@ -423,7 +438,7 @@ public class ClientGUI extends javax.swing.JFrame {
             btServerToClient.setEnabled(false);
             int index = tbLocal.getSelectedRow();
             data = modelLocal.get(index);
-
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
@@ -436,7 +451,7 @@ public class ClientGUI extends javax.swing.JFrame {
             btClientToServer.setEnabled(false);
             int index = tbServer.getSelectedRow();
             data = modelServer.get(index);
-
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
@@ -453,7 +468,7 @@ public class ClientGUI extends javax.swing.JFrame {
                     File f = chooser.getSelectedFile();
                     tfShowLocalPath.setText("" + f.getAbsoluteFile());
                     modelLocal.getLocalDatas(f);
-
+                    
                 } catch (Exception ex) {
                     throw new Exception("Error while opening..." + ex.toString());
                 }
@@ -471,7 +486,7 @@ public class ClientGUI extends javax.swing.JFrame {
         try {
             //KeyCode for Enter = 10
             if (evt.getKeyCode() == 10) {
-
+                
                 if (tfShowLocalPath.getText().isEmpty()) {
                     throw new Exception("You have to type in a Local File");
                 }
@@ -479,7 +494,7 @@ public class ClientGUI extends javax.swing.JFrame {
                 File f = new File(tfShowLocalPath.getText());
                 modelLocal.getLocalDatas(f);
             }
-
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
@@ -496,7 +511,7 @@ public class ClientGUI extends javax.swing.JFrame {
         //oder vielleicht lieber doch nicht ? Notiz an mich selbst
         tfShowLocalPath.setEditable(true);
         tfShowServerPath.setEditable(false);
-
+        
         btStart.setEnabled(true);
         btStop.setEnabled(false);
         btServerManager.setEnabled(true);
@@ -508,16 +523,16 @@ public class ClientGUI extends javax.swing.JFrame {
     public void setPath(String server) {
         tfShowServerPath.setText(server);
     }
-
+    
     public void setData(String ip, int port) {
         System.err.println("setData: " + ip + " " + port);
-
+        
         tfIP.setText("");
         tfPort.setText("");
         tfIP.setText(ip);
         tfPort.setText("" + port);
     }
-
+    
     public static void main(String args[]) {
         //Use Windows Look&Feel
         try {

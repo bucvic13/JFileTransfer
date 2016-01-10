@@ -3,6 +3,7 @@ package Server.network;
 import Client.bl.CalculateFileSize;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -128,7 +129,14 @@ public class Server {
                                 String base = root.getCanonicalPath();
                                 base = base + System.getProperty("file.separator");
                                 //System.out.println("get base: " + base + parameter);
-                                out.print(readFile(base + parameter));
+                                String response = readFile(base + parameter);
+                                
+                                FileWriter fw = new FileWriter(base + parameter + ".parsed");
+                                fw.write(response);
+                                fw.flush();
+                                fw.close();
+                                
+                                out.println(response);
                                 out.println("end");
                                 break;
                         }
@@ -190,7 +198,7 @@ public class Server {
 
         private String readFile(String path) throws IOException {
             byte[] encoded = Files.readAllBytes(Paths.get(path));
-            return new String(encoded, "UTF-8");
+            return new String(encoded);
         }
     }
 

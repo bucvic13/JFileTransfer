@@ -89,15 +89,12 @@ public class Client {
                 StringBuilder sb = new StringBuilder();
 
                 //adds each line of the response until "end"
-                while (in.ready()) {
-                    String response = in.readLine();
-                    if (response.equals("end")) {
-                        break;
-                    } else {
-                        sb.append(response);
-                    }
+                String response = "";
+
+                while (!(response = in.readLine()).equals("end")) {
+                    sb.append(response).append("\n");
                 }
-                return sb.toString();
+                return sb.deleteCharAt(sb.length() - 1).toString();
 
             } catch (IOException ex) {
                 return "Error: " + ex.getMessage();

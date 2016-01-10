@@ -82,6 +82,9 @@ public class ClientModel extends AbstractTableModel {
     //gets the data from the local path and adds it to the list
     public void getLocalDatas(File root) {
         
+        //remove all
+        clearList();
+        
         //continues until the last elem is added
         for (File elem : root.listFiles()) {
             if (!elem.isDirectory()) {
