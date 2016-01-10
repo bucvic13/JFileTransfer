@@ -67,8 +67,8 @@ public class ClientGUI extends javax.swing.JFrame {
         tfIP = new javax.swing.JTextField();
         tfPort = new javax.swing.JTextField();
         btStop = new javax.swing.JButton();
-        btClientToServer = new javax.swing.JButton();
         btServerToClient = new javax.swing.JButton();
+        btClientToServer = new javax.swing.JButton();
         btServerManager = new javax.swing.JButton();
         btStart = new javax.swing.JButton();
         pnData = new javax.swing.JPanel();
@@ -157,10 +157,10 @@ public class ClientGUI extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
         pnOptions.add(btStop, gridBagConstraints);
 
-        btClientToServer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Client/src/back.png"))); // NOI18N
-        btClientToServer.addActionListener(new java.awt.event.ActionListener() {
+        btServerToClient.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Client/src/back.png"))); // NOI18N
+        btServerToClient.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                onClientToServer(evt);
+                onServerToClient(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -169,12 +169,12 @@ public class ClientGUI extends javax.swing.JFrame {
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
-        pnOptions.add(btClientToServer, gridBagConstraints);
+        pnOptions.add(btServerToClient, gridBagConstraints);
 
-        btServerToClient.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Client/src/right.png"))); // NOI18N
-        btServerToClient.addActionListener(new java.awt.event.ActionListener() {
+        btClientToServer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Client/src/right.png"))); // NOI18N
+        btClientToServer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                onServerToClient(evt);
+                onClientToServer(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -183,7 +183,7 @@ public class ClientGUI extends javax.swing.JFrame {
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 2);
-        pnOptions.add(btServerToClient, gridBagConstraints);
+        pnOptions.add(btClientToServer, gridBagConstraints);
 
         btServerManager.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Client/src/menu.png"))); // NOI18N
         btServerManager.addActionListener(new java.awt.event.ActionListener() {
@@ -322,20 +322,6 @@ public class ClientGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void onClientToServer(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onClientToServer
-        //Select file (local) that shall be copied to the Server
-        try {
-            if (data == null) {
-                throw new Exception("Please chose a File from Local");
-            }
-
-            JOptionPane.showMessageDialog(this, data + "will be copied to the Server");
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-        }
-    }//GEN-LAST:event_onClientToServer
-
     private void onServerToClient(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onServerToClient
         //Select file (server) that shall be copied to the Client
         try {
@@ -352,7 +338,6 @@ public class ClientGUI extends javax.swing.JFrame {
             if (client.isListening()) {
                 String response = client.sendLongCommand("get#" + data.getName());
                 System.err.println("got response: " + response);
-
                 modelLocal.addFromServerToClient(data);
 
             } else {
@@ -364,6 +349,32 @@ public class ClientGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_onServerToClient
 
+    private void onClientToServer(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onClientToServer
+        //Select file (local) that shall be copied to the Server
+        try {
+            if (data == null) {
+                throw new Exception("Please chose a File from Local");
+            }
+
+            JOptionPane.showMessageDialog(this, data + "will be copied to the Server");
+            
+               if (client.isListening()) {
+                String response = client.sendCommandFileTransfer("upload#" + data.getName());
+                System.err.println("got response: " + response);
+
+                modelLocal.addFromServerToClient(data);
+
+            } else {
+                System.out.println("not listening");
+            }
+            
+            modelServer.addFromClientToServer(data);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_onClientToServer
+
     private void onStop(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onStop
         //Interrupt connection to the server
         try {
@@ -374,6 +385,8 @@ public class ClientGUI extends javax.swing.JFrame {
                 btStart.setEnabled(true);
                 btStop.setEnabled(false);
                 btServerManager.setEnabled(true);
+                modelLocal.clearList();
+                modelServer.clearList();
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
@@ -385,7 +398,7 @@ public class ClientGUI extends javax.swing.JFrame {
         try {
 
             //this.setVisible(false);
-            ServerManagerGUI managerGUI = new ServerManagerGUI();
+            ServerManagerGUI managerGUI = new ServerManagerGUI(this);
             managerGUI.setVisible(true);
 
         } catch (Exception e) {
@@ -419,8 +432,8 @@ public class ClientGUI extends javax.swing.JFrame {
     private void tbLocalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbLocalMouseClicked
         //clickEvent of ClientTable: only to select one file
         try {
-            btClientToServer.setEnabled(true);
             btServerToClient.setEnabled(false);
+            btClientToServer.setEnabled(true);
             int index = tbLocal.getSelectedRow();
             data = modelLocal.get(index);
 
@@ -432,8 +445,8 @@ public class ClientGUI extends javax.swing.JFrame {
     private void tbServerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbServerMouseClicked
         //clickEvent of ServerTable: only to select one file
         try {
-            btServerToClient.setEnabled(true);
             btClientToServer.setEnabled(false);
+            btServerToClient.setEnabled(true);
             int index = tbServer.getSelectedRow();
             data = modelServer.get(index);
 
@@ -452,6 +465,7 @@ public class ClientGUI extends javax.swing.JFrame {
                 try {
                     File f = chooser.getSelectedFile();
                     tfShowLocalPath.setText("" + f.getAbsoluteFile());
+                    modelLocal.clearList();
                     modelLocal.getLocalDatas(f);
 
                 } catch (Exception ex) {
@@ -488,8 +502,8 @@ public class ClientGUI extends javax.swing.JFrame {
     //initializes elements of the gui
     private void initGuiElements() {
         Color col = new Color(240, 240, 240);
-        btClientToServer.setBackground(col);
         btServerToClient.setBackground(col);
+        btClientToServer.setBackground(col);
         btStop.setBackground(col);
         btServerManager.setBackground(col);
 
@@ -500,8 +514,8 @@ public class ClientGUI extends javax.swing.JFrame {
         btStart.setEnabled(true);
         btStop.setEnabled(false);
         btServerManager.setEnabled(true);
-        btClientToServer.setEnabled(false); //only enabled when a datafile is selected (at the local table)
-        btServerToClient.setEnabled(false);//only enabled when a datafile is selected (at the server table)
+        btServerToClient.setEnabled(false); //only enabled when a datafile is selected (at the local table)
+        btClientToServer.setEnabled(false);//only enabled when a datafile is selected (at the server table)
     }
 
     //gets the Path from the ServerGUI

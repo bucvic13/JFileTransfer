@@ -1,6 +1,7 @@
 package Client.network;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -105,7 +106,12 @@ public class Client {
         }
         throw new Exception("Not connected");
     }
-
+    
+    public String sendCommandFileTransfer(String cmd)
+    {
+        return "";
+    }
+    
     public String getIp() {
         return ip;
     }

@@ -131,6 +131,10 @@ public class Server {
                                 out.print(readFile(base + parameter));
                                 out.println("end");
                                 break;
+                            case "upload":
+                                System.out.println("commang upload");
+                                
+                                break;
                         }
 
                     } catch (Exception e) {

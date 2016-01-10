@@ -28,10 +28,10 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/Client/src/downMini.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Safe"/>
+                <Property name="text" type="java.lang.String" value="Save"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onSafeData"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onSaveData"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="miExit">

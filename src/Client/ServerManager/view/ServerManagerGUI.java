@@ -20,10 +20,12 @@ import javax.swing.JOptionPane;
 public class ServerManagerGUI extends javax.swing.JFrame {
 
     private ServerManagerModel model;
+    private ClientGUI clientGui;
 
-    public ServerManagerGUI() {
+    public ServerManagerGUI(ClientGUI clientGui) {
         try {
             initComponents();
+            this.clientGui = clientGui;
             model = new ServerManagerModel();
             tbSafedServer.setModel(model);
         } catch (Exception ex) {
@@ -145,10 +147,10 @@ public class ServerManagerGUI extends javax.swing.JFrame {
         jMenu1.add(miLoad);
 
         miSafe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Client/src/downMini.png"))); // NOI18N
-        miSafe.setText("Safe");
+        miSafe.setText("Save");
         miSafe.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                onSafeData(evt);
+                onSaveData(evt);
             }
         });
         jMenu1.add(miSafe);
@@ -219,8 +221,7 @@ public class ServerManagerGUI extends javax.swing.JFrame {
             int port = data.getPort();
             System.out.println("onSelect: " + data.toString());
 
-            ClientGUI clientFrame = new ClientGUI();
-            clientFrame.setData(ip, port);
+            clientGui.setData(ip, port);
             
             //closes this frame
             this.dispose();
@@ -234,7 +235,7 @@ public class ServerManagerGUI extends javax.swing.JFrame {
         //woher kommt das schon wieder ???
     }//GEN-LAST:event_onLoad
 
-    private void onSafeData(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onSafeData
+    private void onSaveData(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onSaveData
         //The user can choose a file for saving all the elemts of the table
         JFileChooser chooser = new JFileChooser("");
         int ret = chooser.showSaveDialog(null);
@@ -246,7 +247,7 @@ public class ServerManagerGUI extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Error while saving..." + ex.toString());
             }
         }
-    }//GEN-LAST:event_onSafeData
+    }//GEN-LAST:event_onSaveData
 
     private void onExit(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onExit
         //closes the frame
