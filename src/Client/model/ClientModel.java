@@ -43,8 +43,9 @@ public class ClientModel extends AbstractTableModel {
         DataFile data = dataFiles.get(rowIndex);
         return data;
     }
-
-    public void clearList() {
+    
+    public void clearList()
+    {
         dataFiles.clear();
         super.fireTableDataChanged();
     }
@@ -56,21 +57,22 @@ public class ClientModel extends AbstractTableModel {
 
         //returns the RootElement: <RootDirectory>
         Element rootNode = doc.getRootElement();
-
+        
         //adds all Children <File> from the RootElement to the list
         List list = rootNode.getChildren("File");
 
         //runs through the list until the end of it
         for (int i = 0; i < list.size(); i++) {
-
+            
             //gets the item from the list and parses it into an Element
             Element node = (Element) list.get(i);
-
+            
             //returns the value of the Attribute size
             double size = Double.parseDouble(node.getAttributeValue("size"));
 
             //System.out.println("File-Name: " + node.getText());
             //System.out.println("File-Size: " + size);
+            
             //adds the element to the list
             add(new DataFile(node.getText(), size));
         }
@@ -79,14 +81,17 @@ public class ClientModel extends AbstractTableModel {
 
     //gets the data from the local path and adds it to the list
     public void getLocalDatas(File root) {
-
+        
+        //remove all
+        clearList();
+        
         //continues until the last elem is added
         for (File elem : root.listFiles()) {
             if (!elem.isDirectory()) {
-
+                
                 //gets the Name of the file
                 String name = elem.getName();
-
+                
                 //calls the static Method calcFileSize() to calculate the size of the file
                 double size = CalculateFileSize.calcFileSize(elem);
                 add(new DataFile(name, size));
@@ -125,17 +130,7 @@ public class ClientModel extends AbstractTableModel {
         }
     }
 
-    public void writeTo(String response, File path) {
-        System.out.println("writeToLocal");
-        path.mkdirs(); 
-    }
-
     public void addFromServerToClient(DataFile data) {
-        add(data);
-        super.fireTableDataChanged();
-    }
-
-    public void addFromClientToServer(DataFile data) {
         add(data);
         super.fireTableDataChanged();
     }
