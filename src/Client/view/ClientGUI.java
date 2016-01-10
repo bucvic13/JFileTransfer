@@ -350,8 +350,11 @@ public class ClientGUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, data + "will be copied to the Client");
 
             if (client.isListening()) {
-                String response = client.sendCommand("get");
-                System.out.println("got response: " + response);
+                String response = client.sendLongCommand("get#" + data.getName());
+                System.err.println("got response: " + response);
+
+                modelLocal.addFromServerToClient(data);
+
             } else {
                 System.out.println("not listening");
             }

@@ -70,8 +70,8 @@ public class ClientModel extends AbstractTableModel {
             //returns the value of the Attribute size
             double size = Double.parseDouble(node.getAttributeValue("size"));
 
-            System.out.println("File-Name: " + node.getText());
-            System.out.println("File-Size: " + size);
+            //System.out.println("File-Name: " + node.getText());
+            //System.out.println("File-Size: " + size);
             
             //adds the element to the list
             add(new DataFile(node.getText(), size));

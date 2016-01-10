@@ -159,7 +159,6 @@ public class ServerGUI extends javax.swing.JFrame {
 
     private void onStartServer(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onStartServer
         try {
-
             //reads the rootDirectory from the textField
             String root = tfRootDirectory.getText();
 

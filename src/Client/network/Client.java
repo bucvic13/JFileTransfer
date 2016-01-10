@@ -37,7 +37,7 @@ public class Client {
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
         System.out.println("Connected");
-        
+
         //sets listening true: client is connected with the server
         listening = true;
     }
@@ -55,9 +55,10 @@ public class Client {
     }
 
     public String sendCommand(String cmd) throws Exception {
-        
+
         //checks, if everything is working right
         if (socket != null && in != null && out != null) {
+
             //parses the command to the Server
             out.println(cmd);
             String response = "";
@@ -74,6 +75,33 @@ public class Client {
                 response = "Error: " + ex.getMessage();
             }
             return response;
+        }
+        throw new Exception("Not connected");
+    }
+
+    public String sendLongCommand(String cmd) throws Exception {
+        //checks, if everything is working right
+        if (socket != null && in != null && out != null) {
+
+            //parses the command to the Server
+            out.println(cmd);
+            try {
+                StringBuilder sb = new StringBuilder();
+
+                //adds each line of the response until "end"
+                while (in.ready()) {
+                    String response = in.readLine();
+                    if (response.equals("end")) {
+                        break;
+                    } else {
+                        sb.append(response);
+                    }
+                }
+                return sb.toString();
+
+            } catch (IOException ex) {
+                return "Error: " + ex.getMessage();
+            }
         }
         throw new Exception("Not connected");
     }

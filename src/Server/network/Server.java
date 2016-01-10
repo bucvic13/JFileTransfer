@@ -91,18 +91,31 @@ public class Server {
         @Override
         public void run() {
             try {
+                //to get things from the server
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                //for returning things to the client
                 out = new PrintWriter(socket.getOutputStream(), true);
 
                 //wait for commands
                 while (running) {
 
-                    //reads the command from the Server
+                    //reads the command from the Server, only the first line
                     String command = in.readLine();
 
                     //if there is no command, the server stops
                     if (command == null) {
                         break;
+                    }
+
+                     String parameter = "";
+                    
+                     //checks if there are any parameters behind the command
+                    if (command.contains("#")) {
+                        String commandoParts[] = command.split("#");
+                        //returns the command
+                        command = commandoParts[0];
+                        //returns the parameter
+                        parameter = commandoParts[1];
                     }
 
                     try {
@@ -111,13 +124,17 @@ public class Server {
                                 generateXml();
                                 break;
                             case "get":
-                                System.out.println("command get");
-                                readFile("");
+                                //System.out.println("command get: " + parameter);
+                                String base = root.getCanonicalPath();
+                                base = base + System.getProperty("file.separator");
+                                //System.out.println("get base: " + base + parameter);
+                                out.print(readFile(base + parameter));
+                                out.println("end");
                                 break;
                         }
 
                     } catch (Exception e) {
-                        out.printf("Fehler: " + e);
+                        out.printf("Error: " + e);
                     }
                 }
 
@@ -171,7 +188,7 @@ public class Server {
             out.println(output);
         }
 
-        public String readFile(String path) throws IOException {
+        private String readFile(String path) throws IOException {
             byte[] encoded = Files.readAllBytes(Paths.get(path));
             return new String(encoded, "UTF-8");
         }
