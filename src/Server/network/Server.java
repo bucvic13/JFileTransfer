@@ -2,6 +2,7 @@ package Server.network;
 
 import Client.bl.CalculateFileSize;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -108,9 +109,9 @@ public class Server {
                         break;
                     }
 
-                     String parameter = "";
-                    
-                     //checks if there are any parameters behind the command
+                    String parameter = "";
+
+                    //checks if there are any parameters behind the command
                     if (command.contains("#")) {
                         String commandoParts[] = command.split("#");
                         //returns the command
@@ -134,6 +135,34 @@ public class Server {
                                 out.println(response);
                                 out.println("end");
                                 break;
+                            case "upload":
+                                //TODO in methode auslagern
+
+                                try {
+                                    StringBuilder sb = new StringBuilder();
+
+                                    //adds each line of the response until "end"
+                                    String line = "";
+
+                                    while (!(line = in.readLine()).equals("end")) {
+                                        sb.append(line).append("\n");
+                                    }
+
+                                    sb.deleteCharAt(sb.length() - 1);
+
+                                    String newPath = root.getCanonicalPath();
+                                    newPath = newPath + System.getProperty("file.separator");
+                                    newPath += parameter;
+
+                                    BufferedWriter bw = new BufferedWriter(new FileWriter(newPath));
+                                    bw.write(sb.toString());
+                                    bw.flush();
+                                    bw.close();
+                                } catch (Exception e) {
+                                    out.println("failure");
+                                }
+
+                                out.println("success");
                         }
 
                     } catch (Exception e) {

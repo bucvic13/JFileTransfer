@@ -9,6 +9,9 @@ import java.awt.Color;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -333,6 +336,15 @@ public class ClientGUI extends javax.swing.JFrame {
             
             JOptionPane.showMessageDialog(this, data + "will be copied to the Server");
             
+            if(client.isListening())
+            {
+                String localPath = tfShowLocalPath.getText();
+                String newPath = localPath.endsWith("/") ? localPath : localPath + "/";
+                newPath += data.getName();
+                
+                client.sendCommandWithData("upload#" + data.getName(), readFile(newPath));
+            }
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
@@ -500,6 +512,11 @@ public class ClientGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_onEnterLocalPath
 
+    private String readFile(String path) throws IOException {
+            byte[] encoded = Files.readAllBytes(Paths.get(path));
+            return new String(encoded);
+        }
+    
     //initializes elements of the gui
     private void initGuiElements() {
         Color col = new Color(240, 240, 240);

@@ -103,6 +103,28 @@ public class Client {
         throw new Exception("Not connected");
     }
 
+    public String sendCommandWithData(String cmd, String data) throws Exception {
+        //checks, if everything is working right
+        if (socket != null && in != null && out != null) {
+
+            try {
+                out.println(cmd);
+                out.println(data);
+
+                String response = in.readLine();
+                if (response == null || response.equals("")) {
+                    return "";
+                }
+
+                return response;
+
+            } catch (IOException ex) {
+                return "Error: " + ex.getMessage();
+            }
+        }
+        throw new Exception("Not connected");
+    }
+
     public String getIp() {
         return ip;
     }
@@ -114,4 +136,5 @@ public class Client {
     public boolean isListening() {
         return listening;
     }
+
 }
