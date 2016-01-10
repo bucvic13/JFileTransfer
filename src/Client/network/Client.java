@@ -110,6 +110,7 @@ public class Client {
             try {
                 out.println(cmd);
                 out.println(data);
+                out.println("end");
 
                 String response = in.readLine();
                 if (response == null || response.equals("")) {

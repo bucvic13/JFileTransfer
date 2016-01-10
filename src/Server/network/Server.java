@@ -137,7 +137,6 @@ public class Server {
                                 break;
                             case "upload":
                                 //TODO in methode auslagern
-
                                 try {
                                     StringBuilder sb = new StringBuilder();
 
